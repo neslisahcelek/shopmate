@@ -1,4 +1,4 @@
-package com.example.shoppingscanner.ui
+package com.example.shoppingscanner.ui.fragment
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -11,7 +11,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
 import com.example.shoppingscanner.adapter.ProductAdapter
 import com.example.shoppingscanner.databinding.FragmentPaymentCompletedBinding
-import com.example.shoppingscanner.model.Product
 import com.example.shoppingscanner.viewmodel.ProductViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -60,7 +59,8 @@ class PaymentCompletedFragment : Fragment() {
     }
 
     private fun navigateToHome(view: View) {
-       val intent = PaymentCompletedFragmentDirections.actionPaymentCompletedFragmentToBarcodeScannerFragment()
+       val intent =
+           PaymentCompletedFragmentDirections.actionPaymentCompletedFragmentToBarcodeScannerFragment()
         Navigation.findNavController(view).navigate(intent)
     }
 

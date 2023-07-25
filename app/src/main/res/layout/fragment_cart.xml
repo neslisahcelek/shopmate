@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:theme="@style/ThemeOverlay.ShoppingScanner.FullscreenContainer"
-        tools:context=".ui.CartFragment">
+        tools:context=".ui.fragment.CartFragment">
 
         <TextView
             android:id="@+id/myCart"

@@ -7,7 +7,7 @@
         android:id="@+id/payment_completed_fragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.PaymentCompletedFragment">
+        tools:context=".ui.fragment.PaymentCompletedFragment">
 
         <ImageView
             android:id="@+id/payment_completed_image"

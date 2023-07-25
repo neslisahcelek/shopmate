@@ -1,4 +1,4 @@
-package com.example.shoppingscanner.ui
+package com.example.shoppingscanner.ui.fragment
 
 import android.os.Bundle
 import android.os.Handler
@@ -10,7 +10,6 @@ import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
-import com.example.shoppingscanner.R
 import com.example.shoppingscanner.databinding.FragmentDontWaitBinding
 import com.google.android.material.button.MaterialButton
 
@@ -60,7 +59,8 @@ class DontWaitFragment : Fragment() {
     }
 
     fun navigate(view:View){
-        val action = DontWaitFragmentDirections.actionDontWaitFragmentToContinueWithBarcodeFragment()
+        val action =
+            DontWaitFragmentDirections.actionDontWaitFragmentToContinueWithBarcodeFragment()
         Navigation.findNavController(view).navigate(action)
     }
     override fun onResume() {

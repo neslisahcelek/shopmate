@@ -16,3 +16,10 @@ gradle-app.setting
 .project
 # JDT-specific (Eclipse Java Development Tools)
 .classpath
+.idea/.name
+.idea/compiler.xml
+.idea/gradle.xml
+.idea/misc.xml
+.idea/kotlinc.xml
+.idea/vcs.xml
+local.properties

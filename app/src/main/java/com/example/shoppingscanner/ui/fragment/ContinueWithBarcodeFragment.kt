@@ -1,10 +1,7 @@
-package com.example.shoppingscanner.ui
+package com.example.shoppingscanner.ui.fragment
 
 import android.Manifest
-import android.app.Activity
-import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.Bitmap
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -12,13 +9,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.cardview.widget.CardView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
-import com.example.shoppingscanner.R
 import com.example.shoppingscanner.databinding.FragmentContinueWithBarcodeBinding
 import com.google.android.material.button.MaterialButton
 
@@ -92,7 +87,8 @@ class ContinueWithBarcodeFragment : Fragment() {
 
     fun navigateToBarcodeScannerFragment(view:View) {
         Log.d("navigate", "to barcode scanner fragment")
-        val action = ContinueWithBarcodeFragmentDirections.actionContinueWithBarcodeFragmentToBarcodeScannerFragment()
+        val action =
+            ContinueWithBarcodeFragmentDirections.actionContinueWithBarcodeFragmentToBarcodeScannerFragment()
         Navigation.findNavController(view).navigate(action)
     }
 

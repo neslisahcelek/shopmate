@@ -8,7 +8,7 @@
 
     <fragment
         android:id="@+id/dontWaitFragment"
-        android:name="com.example.shoppingscanner.ui.DontWaitFragment"
+        android:name="com.example.shoppingscanner.ui.fragment.DontWaitFragment"
         android:label="fragment_dont_wait"
         tools:layout="@layout/fragment_dont_wait" >
         <action
@@ -17,7 +17,7 @@
     </fragment>
     <fragment
         android:id="@+id/continueWithBarcodeFragment"
-        android:name="com.example.shoppingscanner.ui.ContinueWithBarcodeFragment"
+        android:name="com.example.shoppingscanner.ui.fragment.ContinueWithBarcodeFragment"
         android:label="fragment_continue_with_barcode"
         tools:layout="@layout/fragment_continue_with_barcode" >
         <action
@@ -26,7 +26,7 @@
     </fragment>
     <fragment
         android:id="@+id/barcodeScannerFragment"
-        android:name="com.example.shoppingscanner.ui.BarcodeScannerFragment"
+        android:name="com.example.shoppingscanner.ui.fragment.BarcodeScannerFragment"
         android:label="fragment_barcode_scanner"
         tools:layout="@layout/fragment_barcode_scanner" >
         <action
@@ -35,7 +35,7 @@
     </fragment>
     <fragment
         android:id="@+id/cartFragment"
-        android:name="com.example.shoppingscanner.ui.CartFragment"
+        android:name="com.example.shoppingscanner.ui.fragment.CartFragment"
         android:label="CartFragment" >
         <action
             android:id="@+id/action_cartFragment_to_paymentCompletedFragment"
@@ -43,7 +43,7 @@
     </fragment>
     <fragment
         android:id="@+id/paymentCompletedFragment"
-        android:name="com.example.shoppingscanner.ui.PaymentCompletedFragment"
+        android:name="com.example.shoppingscanner.ui.fragment.PaymentCompletedFragment"
         android:label="fragment_payment_completed">
         <action
             android:id="@+id/action_paymentCompletedFragment_to_barcodeScannerFragment"
