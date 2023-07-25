@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">Shopping Scanner</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="dont_wait">Hadi Bekleme</string>
+    <string name="continue_info">Hadi Bekleme özelliği ile 5 ürüne kadarki alışverişlerinde sıra bekleme.
+        Ödemeyi beklemeden anında tamamla.</string>
+    <string name="continue_with_barcode">Barkod İle Devam Et</string>
+    <string name="product">Ürün:</string>
+    <string name="price">Fiyat:</string>
+    <string name="add_to_cart">Sepete Ekle</string>
+    <string name="buy_now">Hemen Al</string>
+    <string name="price_sum">Toplam Tutar:</string>
+
+    <string name="my_cart">Hemen Sepetim</string>
+    <string name="pay_with_hadi">Hadi İle Öde</string>
+    <string name="price_with_currency">%1$s₺</string>
+
+    <string name="payment_successfull">Ödeme Başarılı</string>
+    <string name="home_screen">Anasayfa</string>
+</resources>
