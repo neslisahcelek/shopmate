@@ -4,6 +4,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.example.shoppingscanner.navigation.setupNavGraph
 import com.example.shoppingscanner.ui.theme.ShoppingScannerTheme
 import dagger.hilt.android.AndroidEntryPoint
 
