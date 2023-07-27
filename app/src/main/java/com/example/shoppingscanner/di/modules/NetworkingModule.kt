@@ -3,6 +3,7 @@ package com.example.shoppingscanner.di.modules
 import com.example.shoppingscanner.manager.BarcodeRepositoryImpl
 import com.example.shoppingscanner.network.BarcodeRepository
 import com.example.shoppingscanner.network.BarcodeService
+import com.example.shoppingscanner.util.Constants
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
@@ -16,14 +17,13 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object NetworkingModule {
-    private val BASE_URL = "https://api.barcodelookup.com/v3/"
     private val moshi = Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
 
     @Provides
     @Singleton
     fun providesRetrofit(): Retrofit {
         return Retrofit.Builder()
-            .baseUrl(BASE_URL)
+            .baseUrl(Constants.BASE_URL)
             .addConverterFactory(MoshiConverterFactory.create(moshi))
             .build()
     }

@@ -1,4 +1,4 @@
-package com.example.shoppingscanner.compose
+package com.example.shoppingscanner.util
 
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -123,11 +123,11 @@ object ShopTexts {
         text: String,
         modifier: Modifier = Modifier,
         color: Color = Color.Unspecified,
-        fontSize: TextUnit = 16.sp,
+        fontSize: TextUnit = 18.sp,
         fontWeight: FontWeight? = FontWeight.Normal,
         letterSpacing: TextUnit = TextUnit.Unspecified,
         textDecoration: TextDecoration? = null,
-        textAlign: TextAlign? = TextAlign.Center,
+        textAlign: TextAlign? = null,
         overflow: TextOverflow = TextOverflow.Ellipsis,
         maxLines: Int = Int.MAX_VALUE,
     ) = ShopTexts(

@@ -1,8 +1,9 @@
-package com.example.shoppingscanner.compose
+package com.example.shoppingscanner.util
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -13,6 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -54,28 +56,31 @@ object ShopList {
                     .width(30.dp)
                     .height(30.dp),
                 )
+            Spacer(modifier = Modifier.width(15.dp))
             Image(
                 bitmap = ImageBitmap.imageResource(id = R.drawable.barcode),
                 contentDescription = "barcode",
+                contentScale = ContentScale.Fit,
                 modifier = Modifier
-                    .padding(top = 3.dp, bottom = 3.dp, start = 15.dp)
-                    .width(40.dp)
+                    .padding(top = 3.dp, bottom = 3.dp)
+                    .width(50.dp)
                     .height(50.dp)
             )
+            Spacer(modifier = Modifier.width(25.dp))
+
             product.title?.let {
                 ShopTexts.BodyRegular(
                     text = it,
                     fontSize = 14.sp,
                     textAlign = TextAlign.Start,
-                    modifier = Modifier.padding(start=30.dp)
                 )
             }
+            Spacer(modifier = Modifier.width(185.dp))
             product.price?.let {
                 ShopTexts.BodyBold(
                     text = it + " ₺",
                     fontSize = 14.sp,
                     textAlign = TextAlign.Start,
-                    modifier = Modifier.padding(start = 120.dp)
                 )
             }
         }
@@ -86,7 +91,7 @@ object ShopList {
 @Preview(showBackground = true)
 fun ProductRowPreview(){
     ShopList.ProductRow(
-        product = CartProduct("Süt","15.0","",1)
+        product = CartProduct("Süt", "15.0", "", 1)
     )
 }
 
