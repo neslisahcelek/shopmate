@@ -1,10 +1,19 @@
 package com.example.shoppingscanner.model
+import android.os.Parcelable
 import org.simpleframework.xml.Element
 import org.simpleframework.xml.Root
 
 data class ProductResponse(
     val products: List<Product>?
 )
+
+data class CartProduct(
+    val title: String?,
+    val price: String?,
+    val image:String?,
+    var quantity: Int
+)
+
 
 data class Product(
     val barcode_number: String?,
