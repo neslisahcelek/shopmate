@@ -1,4 +1,4 @@
-package com.example.shoppingscanner.presentation.ui
+package com.example.shoppingscanner.presentation.ui.barcode_scanner
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -18,19 +18,27 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.shoppingscanner.R
+import com.example.shoppingscanner.presentation.ui.Screen
+import com.example.shoppingscanner.presentation.viewmodel.ProductViewModel
 import com.example.shoppingscanner.util.ShopButtons
 import com.example.shoppingscanner.util.ShopTexts
 
+
 @Composable
 fun BarcodeScannerScreen(
-    navController: NavController
+    navController: NavController,
+    viewModel : ProductViewModel
     ){
+
+    val state = viewModel.state.value
+
+    val barcodeNumber = "3614272049529"
+
 
     Column(
         modifier= Modifier
@@ -70,7 +78,7 @@ fun BarcodeScannerScreen(
                         textAlign = TextAlign.Start
                     )
                     ShopTexts.BodyRegular(
-                        text =  stringResource(R.string.continue_info),
+                        text = "${state.product!!.title}",
                         modifier = Modifier.fillMaxWidth(),
                         textAlign = TextAlign.Start
                     )
@@ -84,7 +92,7 @@ fun BarcodeScannerScreen(
                         textAlign = TextAlign.Start
                     )
                     ShopTexts.BodyRegular(
-                        text = "15" +" ₺",
+                        text = "${state.product!!.price}" +" ₺",
                         modifier = Modifier.fillMaxWidth(),
                         textAlign = TextAlign.Start
                     )
@@ -93,7 +101,7 @@ fun BarcodeScannerScreen(
 
             Column {
                 ShopTexts.BodyBold(
-                    text = stringResource(R.string.price_sum),
+                    text = stringResource(R.string.price_sum) + "${state.product?.price.toString()}",
                     fontSize = 12.sp,
                     textAlign = TextAlign.End,
                     modifier = Modifier
@@ -110,7 +118,7 @@ fun BarcodeScannerScreen(
                     ShopButtons.Small(
                         text = stringResource(R.string.add_to_cart),
                         onClick = {
-                            addToCart()
+                            viewModel.onEvent(BarcodeScannerEvent.GetData(barcodeNumber))
                         },
                     )
 
@@ -131,12 +139,6 @@ fun BarcodeScannerScreen(
 }
 
 fun addToCart() {
-    TODO("Not yet implemented")
+
 }
 
-
-@Composable
-@Preview(showBackground = true)
-fun BarcodeScannerScreenPreview() {
-    BarcodeScannerScreen(navController = rememberNavController())
-}
