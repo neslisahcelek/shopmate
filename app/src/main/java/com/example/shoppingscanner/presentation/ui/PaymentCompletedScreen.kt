@@ -26,13 +26,15 @@ import com.example.shoppingscanner.R
 import com.example.shoppingscanner.util.ShopButtons
 import com.example.shoppingscanner.util.ShopList
 import com.example.shoppingscanner.util.ShopTexts
-import com.example.shoppingscanner.data.remote.dto.CartProduct
+import com.example.shoppingscanner.domain.model.CartProduct
+import com.example.shoppingscanner.presentation.viewmodel.ProductViewModel
 
 
 @Composable
 fun PaymentCompletedScreen(
     barcode: String,
-    navController: NavController
+    navController: NavController,
+    viewModel : ProductViewModel
 ) {
 
     var productList = remember {
@@ -82,10 +84,12 @@ fun PaymentCompletedScreen(
         )
     }
 }
-
+/*
 @Composable
 @Preview(showBackground = true)
 fun PaymentCompletedScreenPreview() {
     var product = CartProduct("123","Süt","15.0","",1)
     PaymentCompletedScreen(product.barcode_number,navController = rememberNavController())
 }
+
+ */

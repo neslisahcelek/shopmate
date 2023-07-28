@@ -7,14 +7,15 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.example.shoppingscanner.presentation.ui.Screen
-import com.example.shoppingscanner.presentation.ui.BarcodeScannerScreen
+import com.example.shoppingscanner.presentation.ui.barcode_scanner.BarcodeScannerScreen
 import com.example.shoppingscanner.presentation.ui.CartScreen
 import com.example.shoppingscanner.presentation.ui.ContinueWithBarcodeScreen
 import com.example.shoppingscanner.presentation.ui.DontWaitScreen
 import com.example.shoppingscanner.presentation.ui.PaymentCompletedScreen
+import com.example.shoppingscanner.presentation.viewmodel.ProductViewModel
 
 @Composable
-fun setupNavGraph(navController: NavHostController) {
+fun setupNavGraph(navController: NavHostController, viewModel:ProductViewModel) {
     NavHost(
         navController = navController,
         startDestination = Screen.DontWaitScreen.route)
@@ -34,7 +35,7 @@ fun setupNavGraph(navController: NavHostController) {
         composable(
             route = Screen.BarcodeScannerScreen.route
         ) {
-            BarcodeScannerScreen(navController)
+            BarcodeScannerScreen(navController, viewModel = viewModel)
         }
 
         composable(
@@ -46,6 +47,7 @@ fun setupNavGraph(navController: NavHostController) {
             )
         ) {
             CartScreen(
+                viewModel = viewModel,
                 navController = navController,
                 barcode = it.arguments?.getString("barcode")!!
             )
@@ -60,6 +62,7 @@ fun setupNavGraph(navController: NavHostController) {
             )
         ) { entry ->
             PaymentCompletedScreen(
+                viewModel = viewModel,
                 navController = navController,
                 barcode= entry.arguments?.getString("barcode")!!
             )

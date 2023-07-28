@@ -11,14 +11,16 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.shoppingscanner.R
-import com.example.shoppingscanner.data.remote.dto.CartProduct
+import com.example.shoppingscanner.domain.model.CartProduct
+import com.example.shoppingscanner.presentation.viewmodel.ProductViewModel
 import com.example.shoppingscanner.util.ShopButtons
 import com.example.shoppingscanner.util.ShopTexts
 
 @Composable
 fun CartScreen(
     navController: NavController,
-    barcode: String
+    barcode: String,
+    viewModel : ProductViewModel
 ) {
 
     Column (
@@ -38,12 +40,14 @@ fun CartScreen(
 
 
 }
-
+/*
 
 @Composable
 @Preview(showBackground = true)
 fun CartScreenPreview() {
     var product = CartProduct("1234","Süt","15.0","",1)
-    CartScreen(navController = rememberNavController(),product.barcode_number)
+    CartScreen(navController = rememberNavController(),product.barcode_number, viewModel = vi)
 }
 
+
+ */
