@@ -1,4 +1,4 @@
-package com.example.shoppingscanner.di
+package com.example.shoppingscanner
 
 import android.app.Application
 import dagger.hilt.android.HiltAndroidApp
