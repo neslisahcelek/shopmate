@@ -21,15 +21,17 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.shoppingscanner.R
-import com.example.shoppingscanner.model.CartProduct
+import com.example.shoppingscanner.data.remote.dto.CartProduct
 
 object ShopList {
     @Composable
     fun ProductList(
-        productList : List<CartProduct>
+        productList : List<CartProduct>,
+        modifier: Modifier
     ) {
         LazyColumn(
-            contentPadding = PaddingValues(5.dp)
+            contentPadding = PaddingValues(5.dp),
+            modifier = modifier
         ){
             items(productList){ product ->
                 ProductRow(product = product)
@@ -91,7 +93,7 @@ object ShopList {
 @Preview(showBackground = true)
 fun ProductRowPreview(){
     ShopList.ProductRow(
-        product = CartProduct("Süt", "15.0", "", 1)
+        product = CartProduct("1233","Süt", "15.0", "", 1)
     )
 }
 

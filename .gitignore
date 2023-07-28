@@ -23,3 +23,4 @@ gradle-app.setting
 .idea/kotlinc.xml
 .idea/vcs.xml
 local.properties
+.idea/modules/app/Shopping_Scanner.app.iml

@@ -17,7 +17,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
-        android:name=".ScannerApplication"
+        android:name=".di.ScannerApplication"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -32,7 +32,7 @@
             android:name="com.google.mlkit.vision.DEPENDENCIES"
             android:value="barcode" />
 
-        <activity android:name="com.example.shoppingscanner.MainActivity"
+        <activity android:name="com.example.shoppingscanner.presentation.ui.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -15,7 +15,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.shoppingscanner.ui.theme.PurplePrimary
+import com.example.shoppingscanner.presentation.ui.theme.PurplePrimary
 
 object ShopButtons {
     @Composable

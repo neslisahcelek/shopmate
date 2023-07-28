@@ -1,8 +1,8 @@
 package com.example.shoppingscanner.di.modules
 
-import com.example.shoppingscanner.manager.BarcodeRepositoryImpl
-import com.example.shoppingscanner.network.BarcodeRepository
-import com.example.shoppingscanner.network.BarcodeService
+import com.example.shoppingscanner.di.manager.BarcodeRepositoryImpl
+import com.example.shoppingscanner.domain.repository.BarcodeRepository
+import com.example.shoppingscanner.data.remote.BarcodeService
 import com.example.shoppingscanner.util.Constants
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
@@ -36,7 +36,7 @@ object NetworkingModule {
 
     @Provides
     @Singleton
-    fun providesBarcodeRepository(api:BarcodeService):BarcodeRepository{
+    fun providesBarcodeRepository(api: BarcodeService): BarcodeRepository {
         return BarcodeRepositoryImpl(api)
     }
 }
