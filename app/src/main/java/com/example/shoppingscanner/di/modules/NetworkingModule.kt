@@ -1,7 +1,7 @@
 package com.example.shoppingscanner.di.modules
 
-import com.example.shoppingscanner.di.manager.BarcodeRepositoryImpl
-import com.example.shoppingscanner.domain.repository.BarcodeRepository
+import com.example.shoppingscanner.data.repository.ProductRepositoryImpl
+import com.example.shoppingscanner.domain.repository.ProductRepository
 import com.example.shoppingscanner.data.remote.BarcodeService
 import com.example.shoppingscanner.util.Constants
 import com.squareup.moshi.Moshi
@@ -34,9 +34,5 @@ object NetworkingModule {
         return retrofit.create(BarcodeService::class.java)
     }
 
-    @Provides
-    @Singleton
-    fun providesBarcodeRepository(api: BarcodeService): BarcodeRepository {
-        return BarcodeRepositoryImpl(api)
-    }
+
 }
