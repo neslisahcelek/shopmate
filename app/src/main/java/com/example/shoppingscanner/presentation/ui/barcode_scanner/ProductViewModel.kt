@@ -31,6 +31,7 @@ class ProductViewModel @Inject constructor(
     private val _state = mutableStateOf<BarcodeScannerState>(BarcodeScannerState())
     val state : State<BarcodeScannerState> = _state
 
+    private val product = _state.value.product
     fun getBarcode(){
         println("getbarcode")
         viewModelScope.launch {
@@ -69,6 +70,17 @@ class ProductViewModel @Inject constructor(
                 getDataFromAPI(event.barcode)
             }
         }
+    }
+
+    fun addToCart() {
+        val updatedProduct = product?.copy(quantity = (product.quantity + 1))
+
+        _state.value = state.value.copy(product = updatedProduct)
+
+        updatedProduct?.let {
+            _state.value.totalPrice = it.price?.toDouble()?.times(it.quantity)!!
+        }
+
     }
 }
 

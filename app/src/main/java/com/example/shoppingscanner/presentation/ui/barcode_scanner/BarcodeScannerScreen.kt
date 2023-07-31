@@ -5,8 +5,8 @@ import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.widget.LinearLayout
 import androidx.camera.view.LifecycleCameraController
 import androidx.camera.view.PreviewView
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -19,16 +19,16 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material3.Icon
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.ImageBitmap
-import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
-import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -47,8 +47,7 @@ fun BarcodeScannerScreen(
     navController: NavController,
     viewModel : ProductViewModel
     ) {
-
-    val state = viewModel.state.value
+    val state by rememberUpdatedState(newValue = viewModel.state.value)
     val barcodeNumber = "3614272049529"
 
     val context = LocalContext.current
@@ -79,7 +78,9 @@ fun BarcodeScannerScreen(
                     }
                 },
                 modifier = Modifier.height(200.dp)
-            )
+            ){
+                viewModel.getBarcode()
+            }
         }
             Column(
                 modifier = Modifier
@@ -90,15 +91,24 @@ fun BarcodeScannerScreen(
                 horizontalAlignment = Alignment.CenterHorizontally,
 
                 ) {
-                Icon(
-                    imageVector = Icons.Default.ShoppingCart,
-                    contentDescription = null,
-                    modifier = Modifier
-                        .align(Alignment.End)
-                        .size(40.dp)
-                        .padding(start = 8.dp),
-                    tint = PurplePrimary
-                )
+                Box(
+                    modifier = Modifier.fillMaxWidth(),
+                    contentAlignment = Alignment.BottomEnd) {
+                    Icon(
+                        imageVector = Icons.Default.ShoppingCart,
+                        contentDescription = null,
+                        modifier = Modifier.size(50.dp).padding(start = 8.dp),
+                        tint = PurplePrimary
+                    )
+                    ShopTexts.BodyBold(
+                        text = "${state.product?.quantity}",
+                        fontSize = 14.sp,
+                        modifier = Modifier.padding(end=16.dp, bottom=22.dp),
+                        color = Color.White
+                    )
+                }
+
+
                 Column(
                     verticalArrangement = Arrangement.SpaceEvenly,
                 ) {
@@ -133,12 +143,12 @@ fun BarcodeScannerScreen(
         Column (
             modifier = Modifier
                 .fillMaxHeight()
-                .padding(bottom = 10.dp),
+                .padding(bottom = 15.dp),
             verticalArrangement = Arrangement.Bottom,
             horizontalAlignment = Alignment.End
         ){
             ShopTexts.BodyBold(
-                text = stringResource(R.string.price_sum) + "${state.product?.price.toString()} ₺",
+                text = stringResource(R.string.price_sum) + "${state.totalPrice.toString()} ₺",
                 fontSize = 12.sp,
                 textAlign = TextAlign.End,
                 modifier = Modifier
@@ -147,15 +157,18 @@ fun BarcodeScannerScreen(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(10.dp, bottom = 15.dp, top = 5.dp),
+                    .padding(10.dp, top = 5.dp),
                 horizontalArrangement = Arrangement.SpaceAround,
             ) {
 
                 ShopButtons.Small(
                     text = stringResource(R.string.add_to_cart),
                     onClick = {
+                        viewModel.addToCart()
                         viewModel.getBarcode()
                         //viewModel.getDataFromAPI(barcodeNumber) //code
+
+
                     },
                 )
 
@@ -172,6 +185,7 @@ fun BarcodeScannerScreen(
         }
 
     }
+
 
 
 

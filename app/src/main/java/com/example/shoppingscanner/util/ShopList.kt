@@ -76,9 +76,10 @@ object ShopList {
                     text = it,
                     fontSize = 16.sp,
                     textAlign = TextAlign.Start,
+                    modifier = Modifier.width(190.dp)
+
                 )
             }
-            Spacer(modifier = Modifier.width(185.dp))
             product.price?.let {
                 ShopTexts.BodyBold(
                     text = it + " ₺",
