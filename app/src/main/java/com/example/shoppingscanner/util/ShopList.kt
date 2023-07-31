@@ -21,7 +21,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.shoppingscanner.R
-import com.example.shoppingscanner.data.remote.dto.CartProduct
+import com.example.shoppingscanner.domain.model.CartProduct
+
 
 object ShopList {
     @Composable
@@ -73,7 +74,7 @@ object ShopList {
             product.title?.let {
                 ShopTexts.BodyRegular(
                     text = it,
-                    fontSize = 14.sp,
+                    fontSize = 16.sp,
                     textAlign = TextAlign.Start,
                 )
             }
@@ -81,7 +82,7 @@ object ShopList {
             product.price?.let {
                 ShopTexts.BodyBold(
                     text = it + " ₺",
-                    fontSize = 14.sp,
+                    fontSize = 16.sp,
                     textAlign = TextAlign.Start,
                 )
             }
