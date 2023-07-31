@@ -7,7 +7,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.shoppingscanner.presentation.ui.navigation.setupNavGraph
 import com.example.shoppingscanner.presentation.ui.theme.ShoppingScannerTheme
-import com.example.shoppingscanner.presentation.viewmodel.ProductViewModel
+import com.example.shoppingscanner.presentation.ui.barcode_scanner.ProductViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

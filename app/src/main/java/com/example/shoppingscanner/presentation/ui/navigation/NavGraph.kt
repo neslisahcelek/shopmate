@@ -8,14 +8,14 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.example.shoppingscanner.presentation.ui.Screen
 import com.example.shoppingscanner.presentation.ui.barcode_scanner.BarcodeScannerScreen
-import com.example.shoppingscanner.presentation.ui.CartScreen
-import com.example.shoppingscanner.presentation.ui.ContinueWithBarcodeScreen
-import com.example.shoppingscanner.presentation.ui.DontWaitScreen
-import com.example.shoppingscanner.presentation.ui.PaymentCompletedScreen
-import com.example.shoppingscanner.presentation.viewmodel.ProductViewModel
+import com.example.shoppingscanner.presentation.ui.cart.CartScreen
+import com.example.shoppingscanner.presentation.ui.continue_with_barcode.ContinueWithBarcodeScreen
+import com.example.shoppingscanner.presentation.ui.dont_wait.DontWaitScreen
+import com.example.shoppingscanner.presentation.ui.payment.PaymentCompletedScreen
+import com.example.shoppingscanner.presentation.ui.barcode_scanner.ProductViewModel
 
 @Composable
-fun setupNavGraph(navController: NavHostController, viewModel:ProductViewModel) {
+fun setupNavGraph(navController: NavHostController, viewModel: ProductViewModel) {
     NavHost(
         navController = navController,
         startDestination = Screen.DontWaitScreen.route)
@@ -39,32 +39,21 @@ fun setupNavGraph(navController: NavHostController, viewModel:ProductViewModel) 
         }
 
         composable(
-            route = Screen.CartScreen.route + "/{barcode}",
-            arguments = listOf(
-                navArgument("barcode"){
-                    type = NavType.StringType
-                }
-            )
+            route = Screen.CartScreen.route,
+
         ) {
             CartScreen(
                 viewModel = viewModel,
-                navController = navController,
-                barcode = it.arguments?.getString("barcode")!!
+                navController = navController
             )
         }
 
         composable(
-            route = Screen.PaymentCompletedScreen.route + "/{barcode}",
-            arguments = listOf(
-                navArgument("barcode"){
-                    type = NavType.StringType
-                }
-            )
+            route = Screen.PaymentCompletedScreen.route,
         ) { entry ->
             PaymentCompletedScreen(
                 viewModel = viewModel,
                 navController = navController,
-                barcode= entry.arguments?.getString("barcode")!!
             )
         }
 
