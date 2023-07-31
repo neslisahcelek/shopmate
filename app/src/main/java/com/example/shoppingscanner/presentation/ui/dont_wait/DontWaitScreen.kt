@@ -1,4 +1,4 @@
-package com.example.shoppingscanner.presentation.ui
+package com.example.shoppingscanner.presentation.ui.dont_wait
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -20,6 +20,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.shoppingscanner.R
+import com.example.shoppingscanner.presentation.ui.Screen
 import com.example.shoppingscanner.util.ShopButtons
 import com.example.shoppingscanner.presentation.ui.theme.PurplePrimary
 
@@ -41,30 +42,6 @@ fun DontWaitScreen(
             onClick = {
                 navController.navigate(Screen.ContinueWithBarcodeScreen.route) },
         )
-
-        if (navController.currentBackStackEntry?.destination?.route == Screen.DontWaitScreen.route){
-            Image(
-                imageVector = Icons.Default.List,
-                contentDescription = null,
-                modifier = Modifier
-                    .size(30.dp)
-                    .padding(start = 8.dp)
-            )
-        }
-
-
-        LazyColumn(){
-            items(10){
-                Icon(
-                    imageVector = Icons.Default.ShoppingCart,
-                    contentDescription = null,
-                    modifier = Modifier
-                        .size(60.dp)
-                        .padding(start = 8.dp),
-                    tint = PurplePrimary
-                )
-            }
-        }
 
     }
 }

@@ -1,4 +1,4 @@
-package com.example.shoppingscanner.presentation.ui
+package com.example.shoppingscanner.presentation.ui.continue_with_barcode
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.shoppingscanner.R
+import com.example.shoppingscanner.presentation.ui.Screen
 import com.example.shoppingscanner.util.ShopButtons
 import com.example.shoppingscanner.util.ShopTexts
 
