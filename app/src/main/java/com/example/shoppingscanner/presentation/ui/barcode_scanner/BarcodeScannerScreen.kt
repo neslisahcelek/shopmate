@@ -1,5 +1,6 @@
 package com.example.shoppingscanner.presentation.ui.barcode_scanner
 
+import android.graphics.Bitmap
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.widget.LinearLayout
@@ -29,6 +30,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
@@ -44,6 +46,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.constraintlayout.compose.ConstraintLayoutBaseScope
 import androidx.navigation.NavController
 import com.example.shoppingscanner.R
 import com.example.shoppingscanner.presentation.ui.Screen
@@ -58,15 +62,12 @@ fun BarcodeScannerScreen(
     viewModel : ProductViewModel
     ) {
     val state by rememberUpdatedState(newValue = viewModel.state.value)
-    val barcodeNumber = "3614272049529"
 
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
     val cameraController = remember {
         LifecycleCameraController(context)
     }
-
-    var image:ImageBitmap = ImageBitmap.imageResource(R.drawable.barcode)
 
     Box(
         modifier = Modifier
@@ -81,13 +82,13 @@ fun BarcodeScannerScreen(
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-/*
+            /*
             LaunchedEffect(key1 = viewModel, block = {
                 viewModel.getBarcode()
             })
 
+             */
 
- */
             Box {
                 AndroidView(
 
@@ -106,11 +107,6 @@ fun BarcodeScannerScreen(
 
                 }
 
-                Image(
-                    bitmap = image,
-                    contentDescription = null,
-                    modifier = Modifier.fillMaxSize()
-                )
             }
 
 
@@ -187,47 +183,48 @@ fun BarcodeScannerScreen(
                         )
                     }
                 }
-
-                Column (
+                ConstraintLayout(
                     modifier = Modifier
                         .fillMaxHeight()
+                        .fillMaxWidth()
                         .padding(bottom = 15.dp),
-                    verticalArrangement = Arrangement.Bottom,
-                    horizontalAlignment = Alignment.End
-                ){
+                ) {
+                    val (totalText, addToCartButton, buyNowButton) = createRefs()
+
                     ShopTexts.BodyBold(
                         text = stringResource(R.string.price_sum) + " ${state.totalPrice} ₺",
                         fontSize = 12.sp,
-                        textAlign = TextAlign.End,
-                        modifier = Modifier
-                            .padding(5.dp,)
+                        modifier = Modifier.constrainAs(totalText) {
+                            bottom.linkTo(buyNowButton.top, margin = 2.dp)
+                            centerHorizontallyTo(buyNowButton)
+                        }
                     )
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(10.dp, top = 5.dp),
-                        horizontalArrangement = Arrangement.SpaceAround,
-                    ) {
+                            ShopButtons.Small(
+                                text = stringResource(R.string.add_to_cart),
+                                onClick = {
+                                    viewModel.addToCart()
+                                },
+                                modifier = Modifier.constrainAs(addToCartButton) {
+                                    bottom.linkTo(parent.bottom)
+                                    start.linkTo(parent.start)
+                                },
+                            )
 
-                        ShopButtons.Small(
-                            text = stringResource(R.string.add_to_cart),
-                            onClick = {
-                                viewModel.addToCart()
-
-                            },
-                        )
-
-                        ShopButtons.Small(
-                            text = stringResource(R.string.buy_now),
-                            onClick = {
-                                navController.navigate(Screen.CartScreen.route)
-                            },
-                        )
-
-                    }
-
+                            ShopButtons.Small(
+                                text = stringResource(R.string.buy_now),
+                                onClick = {
+                                    navController.navigate(Screen.CartScreen.route)
+                                },
+                                modifier = Modifier.constrainAs(buyNowButton) {
+                                    bottom.linkTo(parent.bottom)
+                                    end.linkTo(parent.end)
+                                }
+                            )
                 }
+
             }
+
+
         }
 
     }
