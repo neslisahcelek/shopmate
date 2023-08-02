@@ -149,7 +149,7 @@ object ShopTexts {
         text: String,
         modifier: Modifier = Modifier,
         color: Color = Color.Unspecified,
-        fontSize: TextUnit = 18.sp,
+        fontSize: TextUnit = 20.sp,
         fontWeight: FontWeight? = FontWeight.Bold,
         letterSpacing: TextUnit = TextUnit.Unspecified,
         textDecoration: TextDecoration? = null,
