@@ -24,3 +24,4 @@ gradle-app.setting
 .idea/vcs.xml
 local.properties
 .idea/modules/app/Shopping_Scanner.app.iml
+app/src/main/res/drawable/barcode.png
