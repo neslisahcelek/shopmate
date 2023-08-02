@@ -92,11 +92,10 @@ fun PaymentCompletedScreen(
             modifier = Modifier.fillMaxWidth()
         )
         Box(modifier = Modifier.fillMaxHeight(0.7f)){
-            state.product?.let {
-                ShopList.ProductRow(
-                    product= it,
-                )
-            }
+            ShopList.ProductList(
+                productList = state.cartProducts,
+                modifier = Modifier
+            )
         }
 
         ShopButtons.Primary(

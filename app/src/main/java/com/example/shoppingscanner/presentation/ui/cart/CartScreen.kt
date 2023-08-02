@@ -60,11 +60,10 @@ fun CartScreen(
         )
 
         Box(modifier = Modifier.fillMaxHeight(0.8f)){
-            state.product?.let {
-                ShopList.ProductRow(
-                    product= it,
+            ShopList.ProductList(
+                productList = state.cartProducts,
+                modifier = Modifier
                 )
-            }
         }
 
         ShopButtons.Primary(
