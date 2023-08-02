@@ -45,10 +45,11 @@ object ShopButtons {
     fun Small(
         text: String,
         enabled: Boolean = true,
-        onClick: () -> Unit
+        onClick: () -> Unit,
+        modifier: Modifier
     ) {
         Button(
-            modifier = Modifier
+            modifier = modifier
                 .height(48.dp)
                 .width(160.dp),
             enabled = enabled,
@@ -70,7 +71,7 @@ fun ButtonsPreview(){
     Column {
         ShopButtons.Primary(text = "Primary", onClick = {})
         Spacer(modifier = Modifier.height(10.dp))
-        ShopButtons.Small(text = "Small", onClick = {})
+        ShopButtons.Small(text = "Small", onClick = {}, modifier = Modifier)
     }
 
 }
