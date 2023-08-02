@@ -20,6 +20,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
 import com.example.shoppingscanner.R
 import com.example.shoppingscanner.domain.model.CartProduct
 
@@ -54,20 +55,20 @@ object ShopList {
         ){
             Image(
                 bitmap = ImageBitmap.imageResource(id = R.drawable.purpledot),
-                contentDescription = "barcode",
+                contentDescription = "",
                 modifier = Modifier
                     .width(30.dp)
                     .height(30.dp),
                 )
             Spacer(modifier = Modifier.width(15.dp))
-            Image(
-                bitmap = ImageBitmap.imageResource(id = R.drawable.barcode),
-                contentDescription = "barcode",
+            AsyncImage(
+                model = product.image,
+                contentDescription = "Product image",
                 contentScale = ContentScale.Fit,
                 modifier = Modifier
                     .padding(top = 3.dp, bottom = 3.dp)
                     .width(50.dp)
-                    .height(50.dp)
+                    .height(50.dp),
             )
             Spacer(modifier = Modifier.width(25.dp))
 
@@ -80,9 +81,18 @@ object ShopList {
 
                 )
             }
-            product.price?.let {
+            if (product.quantity == 1) {
+                product.price?.let {
+                    ShopTexts.BodyBold(
+                        text = it + " ₺",
+                        fontSize = 16.sp,
+                        textAlign = TextAlign.Start,
+                    )
+                }
+            } else {
+                val totalPrice = (product.price!!.toDouble() * product.quantity).toString() + " ₺"
                 ShopTexts.BodyBold(
-                    text = it + " ₺",
+                    text = totalPrice,
                     fontSize = 16.sp,
                     textAlign = TextAlign.Start,
                 )
