@@ -82,12 +82,12 @@ fun BarcodeScannerScreen(
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            /*
+            
             LaunchedEffect(key1 = viewModel, block = {
                 viewModel.getBarcode()
             })
 
-             */
+
 
             Box {
                 AndroidView(
