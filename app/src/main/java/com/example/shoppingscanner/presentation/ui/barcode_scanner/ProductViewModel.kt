@@ -1,27 +1,16 @@
 package com.example.shoppingscanner.presentation.ui.barcode_scanner
 
 import android.content.Context
-import android.util.Log
-import android.widget.Toast
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.ui.platform.LocalContext
-import androidx.core.content.ContentProviderCompat.requireContext
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.shoppingscanner.data.remote.dto.Product
-import com.example.shoppingscanner.domain.model.CartProduct
 import com.example.shoppingscanner.domain.repository.BarcodeRepository
 import com.example.shoppingscanner.domain.usecase.GetProduct
-import com.example.shoppingscanner.presentation.ui.barcode_scanner.BarcodeScannerEvent
-import com.example.shoppingscanner.presentation.ui.barcode_scanner.BarcodeScannerState
 import com.example.shoppingscanner.util.Resource
 import com.example.shoppingscanner.util.showToast
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -57,7 +46,8 @@ class ProductViewModel @Inject constructor(
         getProductUseCase.executeGetProduct(barcode = barcode).onEach {
             when(it){
                 is Resource.Success -> {
-                    _state.value = _state.value.copy(product = it.data?.get(0))
+                    val product = it.data?.get(0)
+                    _state.value = _state.value.copy(product = product)
                     println("get data from api success new product: " + state.value.product!!.title)
                 }
 
@@ -82,17 +72,24 @@ class ProductViewModel @Inject constructor(
     }
 
     fun addToCart() {
-        val product = state.value.product
-        val updatedProduct = product?.copy(quantity = (product.quantity + 1))
-        println("updated product: " + updatedProduct!!.title)
+        val currentProduct = state.value.product
+        val existingProduct = _state.value.cartProducts.find {
+            it.barcode_number == currentProduct!!.barcode_number }
 
-        _state.value = state.value.copy(product = updatedProduct)
-
-        updatedProduct?.let {
-            _state.value.totalPrice = it.price?.toDouble()?.times(it.quantity)!!
-            println("updated total: " + _state.value.totalPrice)
+        if (existingProduct != null) {
+            existingProduct.quantity++
+            //existingProduct.price = (existingProduct.price!!.toDouble() *2).toString()
+        } else {
+            currentProduct!!.quantity = 1
+            _state.value = _state.value.copy(cartProducts = _state.value.cartProducts + currentProduct)
         }
 
+        _state.value = _state.value.copy(totalPrice = calculateTotalPrice())
+
+    }
+
+    private fun calculateTotalPrice(): Double {
+        return _state.value.cartProducts.sumOf { it.price!!.toDouble() * it.quantity }
     }
 
 }
