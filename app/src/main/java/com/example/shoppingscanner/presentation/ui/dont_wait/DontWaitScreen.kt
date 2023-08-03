@@ -32,7 +32,7 @@ fun DontWaitScreen(
         ShopButtons.Primary(
             text = stringResource(R.string.dont_wait),
             onClick = {
-                navController.navigate(Screen.ContinueWithBarcodeScreen.route) },
+                navController.navigate(Screen.ProductListScreen.route) },
         )
 
     }

@@ -2,10 +2,8 @@ package com.example.shoppingscanner.presentation.ui.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
-import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.navArgument
 import com.example.shoppingscanner.presentation.ui.Screen
 import com.example.shoppingscanner.presentation.ui.barcode_scanner.BarcodeScannerScreen
 import com.example.shoppingscanner.presentation.ui.cart.CartScreen
@@ -13,6 +11,7 @@ import com.example.shoppingscanner.presentation.ui.continue_with_barcode.Continu
 import com.example.shoppingscanner.presentation.ui.dont_wait.DontWaitScreen
 import com.example.shoppingscanner.presentation.ui.payment.PaymentCompletedScreen
 import com.example.shoppingscanner.presentation.ui.barcode_scanner.ProductViewModel
+import com.example.shoppingscanner.presentation.ui.productlist.ProductListScreen
 
 @Composable
 fun setupNavGraph(navController: NavHostController, viewModel: ProductViewModel) {
@@ -24,6 +23,11 @@ fun setupNavGraph(navController: NavHostController, viewModel: ProductViewModel)
             route = Screen.DontWaitScreen.route
         ) {
             DontWaitScreen(navController)
+        }
+        composable(
+            route = Screen.ProductListScreen.route
+        ) {
+            ProductListScreen(navController)
         }
 
         composable(
