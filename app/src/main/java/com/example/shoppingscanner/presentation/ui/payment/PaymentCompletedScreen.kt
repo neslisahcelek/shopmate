@@ -116,40 +116,4 @@ fun PaymentCompletedScreen(
     }
 }
 
-@Preview
-@Composable
-fun imagePreview(){
-    Box(
-        modifier = Modifier
-            .fillMaxHeight()
-            .fillMaxWidth()
 
-
-
-    ){
-        Image(
-            painter = painterResource(id = R.drawable.purpledot),
-            contentDescription = "",
-            modifier = Modifier
-                .fillMaxSize(),
-            contentScale = ContentScale.Crop,
-            colorFilter = ColorFilter.tint(PurpleGrey40)
-
-        )
-        Box(
-            modifier = Modifier.size(120.dp)
-                .align(Alignment.Center)
-                .background(Color.White, shape = CircleShape)
-        )
-        Image(
-            imageVector = Icons.Default.CheckCircle,
-            contentDescription = "tick",
-            modifier = Modifier
-                .size(180.dp)
-                .align(Alignment.Center)
-            ,
-            colorFilter = ColorFilter.tint(Green)
-
-        )
-    }
-}
