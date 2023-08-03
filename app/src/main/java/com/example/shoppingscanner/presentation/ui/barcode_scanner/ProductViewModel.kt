@@ -28,6 +28,7 @@ class ProductViewModel @Inject constructor(
         viewModelScope.launch {
             barcodeRepo.scan().collect(){
                 if(!it.isNullOrBlank()){
+                    println("scan success")
                     getDataFromAPI(it)
                 }else{
                     _state.value.copy(
@@ -42,7 +43,7 @@ class ProductViewModel @Inject constructor(
             when(it){
                 is Resource.Success -> {
                     val product = it.data?.get(0)
-                    _state.value = _state.value.copy(product = product, messageId = R.string.product_found)
+                    _state.value = _state.value.copy(product = product)
                 }
 
                 is Resource.Error -> {
@@ -78,7 +79,7 @@ class ProductViewModel @Inject constructor(
             _state.value = _state.value.copy(cartProducts = _state.value.cartProducts + currentProduct)
         }
 
-        _state.value = _state.value.copy(totalPrice = calculateTotalPrice(),messageId = R.string.add_to_cart)
+        _state.value = _state.value.copy(totalPrice = calculateTotalPrice())
 
     }
 
