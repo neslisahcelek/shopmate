@@ -1,6 +1,6 @@
-package com.example.shoppingscanner.data.remote.dto
+package com.example.shoppingscanner.data.remote.model
 
-data class ProductDto(
+data class ProductResponse(
     val products: List<Product>?
 )
 

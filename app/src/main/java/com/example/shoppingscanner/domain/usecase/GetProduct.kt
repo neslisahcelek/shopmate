@@ -1,7 +1,7 @@
 package com.example.shoppingscanner.domain.usecase
 
 import com.example.shoppingscanner.data.remote.mapper.toDomainModel
-import com.example.shoppingscanner.domain.model.CartProduct
+import com.example.shoppingscanner.domain.dto.CartProduct
 import com.example.shoppingscanner.domain.repository.ProductRepository
 import com.example.shoppingscanner.util.Resource
 import kotlinx.coroutines.flow.Flow

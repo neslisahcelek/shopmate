@@ -23,8 +23,8 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.shoppingscanner.R
 import com.example.shoppingscanner.presentation.ui.Screen
-import com.example.shoppingscanner.util.ShopButtons
-import com.example.shoppingscanner.util.ShopTexts
+import com.example.shoppingscanner.component.ShopButtons
+import com.example.shoppingscanner.component.ShopTexts
 
 @Composable
 fun ContinueWithBarcodeScreen(
