@@ -1,5 +1,5 @@
 # Shopping Scanner
- This application allows you to scan the barcode of products and retrieve information such as product name and price. You can also add products to your cart and make purchases through the app. This document provides instructions on how to install and use the application effectively.
+ This application allows you to scan the barcode of products and retrieve information such as product name and price. You can also add products to your cart and make purchases through the app. This document provides explanations about the application and instructions on how to use the application effectively.
 
 ## Features
 - Scan barcodes using your device's camera to get product information.
