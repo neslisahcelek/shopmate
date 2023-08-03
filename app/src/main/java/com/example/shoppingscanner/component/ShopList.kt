@@ -101,13 +101,6 @@ object ShopList {
     }
 }
 
-@Composable
-@Preview(showBackground = true)
-fun ProductRowPreview(){
-    ShopList.ProductRow(
-        product = CartProduct("1233", "Süt", "15.0", "", 1)
-    )
-}
 
 
 
