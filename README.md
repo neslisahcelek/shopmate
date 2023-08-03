@@ -1,5 +1,5 @@
 # Shopping Scanner
- This application allows you to scan the barcode of products and retrieve information such as product name and price. You can also add products to your cart and make purchases through the app. This document provides instructions on how to install and use the application effectively.
+ This application allows you to scan the barcode of products and retrieve information such as product name and price. You can also add products to your cart and make purchases through the app. This document provides explanations about the application and instructions on how to use the application effectively.
 
 ## Features
 - Scan barcodes using your device's camera to get product information.
@@ -18,3 +18,14 @@
 - To complete purchase, tap the "Pay with Hadi" button.
 
 Please note that the app requires a stable internet connection to fetch product information from the server.
+
+## Technologies Used
+- Dagger Hilt: The app uses Dagger Hilt, a dependency injection library, to manage and provide dependencies throughout the application.
+- Android Jetpack Compose: Jetpack Compose is used to build the user interface of the app, providing a declarative way to create UI components.
+- Android Navigation Component: The Navigation Component from Android Jetpack is used for navigation between different screens in the app.
+- ML Kit Barcode Scanning: The app leverages the ML Kit Barcode Scanning API provided by Google, enabling fast and accurate barcode scanning functionality.
+- Retrofit: Retrofit is used to handle network requests and communication with the server, making it easier to fetch product information.
+- Moshi: Moshi is used for JSON parsing, helping to convert JSON responses from the server into Kotlin objects.
+- Coil: Coil is used for image loading with Jetpack Compose, providing efficient and optimized image loading capabilities.
+- OkHttp: OkHttp is used as an HTTP client, providing easy-to-use APIs for making network requests and handling responses.
+
