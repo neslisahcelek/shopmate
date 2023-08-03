@@ -1,4 +1,4 @@
-package com.example.shoppingscanner.util
+package com.example.shoppingscanner.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.PaddingValues
@@ -22,7 +22,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.example.shoppingscanner.R
-import com.example.shoppingscanner.domain.model.CartProduct
+import com.example.shoppingscanner.domain.dto.CartProduct
 
 
 object ShopList {
@@ -105,7 +105,7 @@ object ShopList {
 @Preview(showBackground = true)
 fun ProductRowPreview(){
     ShopList.ProductRow(
-        product = CartProduct("1233","Süt", "15.0", "", 1)
+        product = CartProduct("1233", "Süt", "15.0", "", 1)
     )
 }
 

@@ -1,4 +1,4 @@
-package com.example.shoppingscanner.util
+package com.example.shoppingscanner.component
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues

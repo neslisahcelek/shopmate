@@ -1,4 +1,4 @@
-package com.example.shoppingscanner.util
+package com.example.shoppingscanner.component
 
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
