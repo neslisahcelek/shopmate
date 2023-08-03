@@ -1,16 +1,14 @@
 package com.example.shoppingscanner.presentation.ui.barcode_scanner
 
-import android.content.Context
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.shoppingscanner.R
 import com.example.shoppingscanner.domain.repository.BarcodeRepository
 import com.example.shoppingscanner.domain.usecase.GetProduct
 import com.example.shoppingscanner.util.Resource
-import com.example.shoppingscanner.util.showToast
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -19,12 +17,11 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ProductViewModel @Inject constructor(
-    @ApplicationContext private val context: Context,
     private val getProductUseCase:GetProduct,
     private val barcodeRepo:BarcodeRepository
 ) : ViewModel() {
 
-    private val _state = mutableStateOf<BarcodeScannerState>(BarcodeScannerState())
+    private val _state = mutableStateOf(BarcodeScannerState())
     val state : State<BarcodeScannerState> = _state
 
     fun getBarcode(){
@@ -33,10 +30,11 @@ class ProductViewModel @Inject constructor(
             barcodeRepo.scan().collect(){
                 println("getbarcode scan")
                 if(!it.isNullOrBlank()){
-                    println("barcode not null")
                     getDataFromAPI(it)
                 }else{
-                    showToast(context,"Barkod bulunamadı.")
+                    _state.value.copy(
+                        messageId = R.string.barcode_not_found
+                    )
                 }
             }
         }
@@ -47,13 +45,12 @@ class ProductViewModel @Inject constructor(
             when(it){
                 is Resource.Success -> {
                     val product = it.data?.get(0)
-                    _state.value = _state.value.copy(product = product)
+                    _state.value = _state.value.copy(product = product, messageId = R.string.product_found)
                     println("get data from api success new product: " + state.value.product!!.title)
                 }
 
                 is Resource.Error -> {
-                    _state.value = state.value.copy(error = it.message)
-                    showToast(context,"Lütfen tekrar deneyin.")
+                    _state.value = state.value.copy(error = it.message, messageId = R.string.try_again)
                     println("get data from api error" + it.message)
                 }
                 is Resource.Loading -> {
@@ -66,7 +63,10 @@ class ProductViewModel @Inject constructor(
     fun onEvent(event:BarcodeScannerEvent){
         when (event){
             is BarcodeScannerEvent.GetData -> {
-                getDataFromAPI(event.barcode)
+                getBarcode()
+            }
+            is BarcodeScannerEvent.OnHandledMessage -> {
+                _state.value.copy(messageId = null)
             }
         }
     }
@@ -78,13 +78,13 @@ class ProductViewModel @Inject constructor(
 
         if (existingProduct != null) {
             existingProduct.quantity++
-            //existingProduct.price = (existingProduct.price!!.toDouble() *2).toString()
         } else {
             currentProduct!!.quantity = 1
             _state.value = _state.value.copy(cartProducts = _state.value.cartProducts + currentProduct)
         }
 
         _state.value = _state.value.copy(totalPrice = calculateTotalPrice())
+        _state.value.copy(messageId = R.string.add_to_cart)
 
     }
 

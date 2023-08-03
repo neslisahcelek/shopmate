@@ -1,12 +1,10 @@
 package com.example.shoppingscanner.presentation.ui.barcode_scanner
 
-import android.graphics.Bitmap
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.widget.LinearLayout
 import androidx.camera.view.LifecycleCameraController
 import androidx.camera.view.PreviewView
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -19,41 +17,33 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material3.Icon
-import androidx.compose.material3.ShapeDefaults
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ImageBitmap
-import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
-import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.constraintlayout.compose.ConstraintLayout
-import androidx.constraintlayout.compose.ConstraintLayoutBaseScope
 import androidx.navigation.NavController
 import com.example.shoppingscanner.R
 import com.example.shoppingscanner.presentation.ui.Screen
 import com.example.shoppingscanner.presentation.ui.theme.PurplePrimary
-import com.example.shoppingscanner.util.ShopButtons
-import com.example.shoppingscanner.util.ShopTexts
+import com.example.shoppingscanner.component.ShopButtons
+import com.example.shoppingscanner.component.ShopTexts
+import com.example.shoppingscanner.util.showToast
 
 
 @Composable
@@ -67,6 +57,19 @@ fun BarcodeScannerScreen(
     val lifecycleOwner = LocalLifecycleOwner.current
     val cameraController = remember {
         LifecycleCameraController(context)
+    }
+
+    state.messageId?.let {
+        showToast(
+            context = context,
+            message = stringResource(id = it)
+        )
+
+        viewModel.onEvent(
+            BarcodeScannerEvent.OnHandledMessage(
+                stringResource(id = it)
+            )
+        )
     }
 
     Box(
@@ -84,7 +87,7 @@ fun BarcodeScannerScreen(
         ) {
             
             LaunchedEffect(key1 = viewModel, block = {
-                viewModel.getBarcode()
+                viewModel.onEvent(BarcodeScannerEvent.GetData())
             })
 
 
@@ -158,7 +161,7 @@ fun BarcodeScannerScreen(
                 ) {
                     Row {
                         ShopTexts.BodyBold(
-                            text = "Ürün: ",
+                            text = stringResource(id = R.string.product),
                             modifier = Modifier.padding(end = 5.dp),
                             textAlign = TextAlign.Start
                         )
@@ -172,12 +175,12 @@ fun BarcodeScannerScreen(
                     Spacer(modifier = Modifier.height(10.dp))
                     Row {
                         ShopTexts.BodyBold(
-                            text = "Fiyat: ",
+                            text = stringResource(id = R.string.price),
                             modifier = Modifier.padding(end = 5.dp),
                             textAlign = TextAlign.Start
                         )
                         ShopTexts.BodyRegular(
-                            text = "${state.product!!.price}" + " ₺",
+                            text = "${state.product!!.price} ₺",
                             modifier = Modifier.fillMaxWidth(),
                             textAlign = TextAlign.Start
                         )
@@ -192,7 +195,7 @@ fun BarcodeScannerScreen(
                     val (totalText, addToCartButton, buyNowButton) = createRefs()
 
                     ShopTexts.BodyBold(
-                        text = stringResource(R.string.price_sum) + " ${state.totalPrice} ₺",
+                        text = stringResource(R.string.price_sum,state.totalPrice),
                         fontSize = 12.sp,
                         modifier = Modifier.constrainAs(totalText) {
                             bottom.linkTo(buyNowButton.top, margin = 2.dp)
