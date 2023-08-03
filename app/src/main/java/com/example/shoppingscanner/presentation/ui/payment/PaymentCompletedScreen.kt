@@ -107,7 +107,7 @@ fun PaymentCompletedScreen(
 
         ShopButtons.Primary(
             onClick = {
-                navController.navigate(Screen.BarcodeScannerScreen.route)
+                navController.navigate(Screen.DontWaitScreen.route)
             },
             text = stringResource(R.string.home_screen),
         )
