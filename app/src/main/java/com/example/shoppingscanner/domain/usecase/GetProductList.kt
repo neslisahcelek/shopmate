@@ -1,22 +1,24 @@
 package com.example.shoppingscanner.domain.usecase
 
 import com.example.shoppingscanner.data.remote.mapper.toCartProduct
+import com.example.shoppingscanner.data.remote.mapper.toListProduct
 import com.example.shoppingscanner.domain.dto.CartProduct
+import com.example.shoppingscanner.domain.dto.ListProduct
 import com.example.shoppingscanner.domain.repository.ProductRepository
 import com.example.shoppingscanner.util.Resource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
-class GetProduct @Inject constructor(
-    private val repository:ProductRepository
+class GetProductList @Inject constructor(
+    private val repository: ProductRepository
 ) {
-    fun executeGetProduct(barcode:String): Flow<Resource<List<CartProduct>>> = flow {
+    fun executeGetProductList(): Flow<Resource<List<ListProduct>>> = flow {
         try{
             emit(Resource.Loading())
-            val productList = repository.getProductDetails(barcode)
+            val productList = repository.getProductList()
             if(productList.products != null){
-                emit(Resource.Success(productList.toCartProduct()))
+                emit(Resource.Success(productList.toListProduct()))
             }else{
                 emit(Resource.Error("Product not found."))
             }

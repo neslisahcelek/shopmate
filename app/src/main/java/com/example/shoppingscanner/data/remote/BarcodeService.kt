@@ -13,4 +13,11 @@ interface BarcodeService {
         @Query("key") format: String = Constants.API_KEY
     ): ProductResponse
 
+    @GET("products")
+    suspend fun getProductList(
+        @Query("category") category: String = "shoes",
+        @Query("brand") brand: String = "adidas",
+        @Query("key") format: String = Constants.API_KEY
+    ): ProductResponse
+
 }

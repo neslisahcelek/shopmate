@@ -11,4 +11,7 @@ class ProductRepositoryImpl(
         return api.getProductDetails(barcode=barcode)
     }
 
+    override suspend fun getProductList(): ProductResponse {
+        return api.getProductList()
+    }
 }
