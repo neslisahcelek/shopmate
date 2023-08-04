@@ -43,6 +43,7 @@ import com.example.shoppingscanner.presentation.ui.Screen
 import com.example.shoppingscanner.presentation.ui.theme.PurplePrimary
 import com.example.shoppingscanner.component.ShopButtons
 import com.example.shoppingscanner.component.ShopTexts
+import com.example.shoppingscanner.presentation.ui.base.BaseEvent
 import com.example.shoppingscanner.util.showToast
 
 
@@ -66,7 +67,7 @@ fun BarcodeScannerScreen(
         )
 
         viewModel.onEvent(
-            BarcodeScannerEvent.OnHandledMessage(
+            BaseEvent.OnHandledMessage(
                 stringResource(id = it)
             )
         )
@@ -86,11 +87,9 @@ fun BarcodeScannerScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             
-            LaunchedEffect(key1 = viewModel, block = {
-                viewModel.onEvent(BarcodeScannerEvent.GetData())
-            })
-
-
+            LaunchedEffect(key1 = viewModel){
+                viewModel.onEvent(BaseEvent.GetData())
+            }
 
             Box {
                 AndroidView(

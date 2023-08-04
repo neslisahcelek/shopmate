@@ -1,5 +1,6 @@
 package com.example.shoppingscanner.presentation.ui.barcode_scanner
 
+import android.app.usage.UsageEvents
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
@@ -7,6 +8,8 @@ import androidx.lifecycle.viewModelScope
 import com.example.shoppingscanner.R
 import com.example.shoppingscanner.domain.repository.BarcodeRepository
 import com.example.shoppingscanner.domain.usecase.GetProduct
+import com.example.shoppingscanner.presentation.ui.base.BaseEvent
+import com.example.shoppingscanner.presentation.ui.base.BaseViewModel
 import com.example.shoppingscanner.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
@@ -29,7 +32,7 @@ class ProductViewModel @Inject constructor(
             barcodeRepo.scan().collect(){
                 if(!it.isNullOrBlank()){
                     println("scan success")
-                    getDataFromAPI(it)
+                    getProductFromAPI(it)
                 }else{
                     _state.value.copy(
                         messageId = R.string.barcode_not_found
@@ -38,7 +41,7 @@ class ProductViewModel @Inject constructor(
             }
         }
     }
-    fun getDataFromAPI(barcode:String) {
+    fun getProductFromAPI(barcode:String) {
         getProductUseCase.executeGetProduct(barcode = barcode).onEach {
             when(it){
                 is Resource.Success -> {
@@ -52,18 +55,24 @@ class ProductViewModel @Inject constructor(
                 is Resource.Loading -> {
                     _state.value = state.value.copy(isLoading = true)
                 }
+
+                else -> {}
             }
         }.launchIn(viewModelScope)
     }
 
-    fun onEvent(event:BarcodeScannerEvent){
+
+
+    fun onEvent(event:BaseEvent){
         when (event){
-            is BarcodeScannerEvent.GetData -> {
+            is BaseEvent.GetData -> {
                 getBarcode()
             }
-            is BarcodeScannerEvent.OnHandledMessage -> {
+            is BaseEvent.OnHandledMessage -> {
                 _state.value.copy(messageId = null)
             }
+
+            else -> {}
         }
     }
 

@@ -1,7 +1,7 @@
 package com.example.shoppingscanner.presentation.ui.barcode_scanner
 
-sealed class BarcodeScannerEvent {
-    class GetData() : BarcodeScannerEvent()
+import com.example.shoppingscanner.presentation.ui.base.BaseEvent
 
-    data class OnHandledMessage(val message : String) : BarcodeScannerEvent()
+sealed class BarcodeScannerEvent {
+
 }
