@@ -12,9 +12,14 @@ import com.example.shoppingscanner.presentation.ui.dont_wait.DontWaitScreen
 import com.example.shoppingscanner.presentation.ui.payment.PaymentCompletedScreen
 import com.example.shoppingscanner.presentation.ui.barcode_scanner.ProductViewModel
 import com.example.shoppingscanner.presentation.ui.productlist.ProductListScreen
+import com.example.shoppingscanner.presentation.ui.productlist.ProductListViewModel
 
 @Composable
-fun setupNavGraph(navController: NavHostController, viewModel: ProductViewModel) {
+fun setupNavGraph(
+    navController: NavHostController,
+    productViewModel: ProductViewModel,
+    productListViewModel: ProductListViewModel
+) {
     NavHost(
         navController = navController,
         startDestination = Screen.DontWaitScreen.route)
@@ -27,7 +32,7 @@ fun setupNavGraph(navController: NavHostController, viewModel: ProductViewModel)
         composable(
             route = Screen.ProductListScreen.route
         ) {
-            ProductListScreen(navController)
+            ProductListScreen(navController, productListViewModel)
         }
 
         composable(
@@ -39,7 +44,7 @@ fun setupNavGraph(navController: NavHostController, viewModel: ProductViewModel)
         composable(
             route = Screen.BarcodeScannerScreen.route
         ) {
-            BarcodeScannerScreen(navController, viewModel = viewModel)
+            BarcodeScannerScreen(navController, viewModel = productViewModel)
         }
 
         composable(
@@ -47,7 +52,7 @@ fun setupNavGraph(navController: NavHostController, viewModel: ProductViewModel)
 
         ) {
             CartScreen(
-                viewModel = viewModel,
+                viewModel = productViewModel,
                 navController = navController
             )
         }
@@ -56,7 +61,7 @@ fun setupNavGraph(navController: NavHostController, viewModel: ProductViewModel)
             route = Screen.PaymentCompletedScreen.route,
         ) { entry ->
             PaymentCompletedScreen(
-                viewModel = viewModel,
+                viewModel = productViewModel,
                 navController = navController,
             )
         }
