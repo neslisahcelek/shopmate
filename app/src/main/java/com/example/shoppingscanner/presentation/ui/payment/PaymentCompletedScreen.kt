@@ -99,7 +99,7 @@ fun PaymentCompletedScreen(
             modifier = Modifier.fillMaxWidth()
         )
         Box(modifier = Modifier.fillMaxHeight(0.7f)){
-            ShopList.ProductList(
+            ShopList.CartProductList(
                 productList = state.cartProducts,
                 modifier = Modifier
             )
