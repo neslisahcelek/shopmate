@@ -1,15 +1,26 @@
 package com.example.shoppingscanner.component
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.Card
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -22,12 +33,95 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.example.shoppingscanner.R
+import com.example.shoppingscanner.component.ShopList.ProductList
 import com.example.shoppingscanner.domain.dto.CartProduct
+import com.example.shoppingscanner.domain.dto.ListProduct
 
 
 object ShopList {
     @Composable
     fun ProductList(
+        productList : List<ListProduct>,
+        modifier: Modifier,
+        onClick:(ListProduct) -> Unit
+    ) {
+        LazyVerticalGrid(
+            columns = GridCells.Fixed(2),
+            contentPadding = PaddingValues(horizontal = 5.dp),
+            modifier = modifier
+        ){
+            items(productList){ product ->
+                ProductItem(
+                    product = product,
+                    onClick = { onClick(product) }
+                )
+            }
+        }
+    }
+
+    @Composable
+    fun ProductItem(
+        product : ListProduct,
+        onClick: () -> Unit
+    ){
+        Column (
+            modifier = Modifier.fillMaxSize(),
+        ) {
+            Box(modifier = Modifier
+                .fillMaxWidth()
+                .height(160.dp)
+            ){
+                Image(
+                    bitmap = ImageBitmap
+                        .imageResource(id = R.drawable.shoppingcar),
+                    modifier = Modifier
+                        .fillMaxWidth(0.8f)
+                        .fillMaxHeight()
+                        .padding(
+                            horizontal = 8.dp
+                        ),
+                    alignment = Alignment.Center,
+                    contentDescription = "",
+                )
+
+                ShopButtons.AddList(
+                    onClick = onClick,
+                    modifier = Modifier.align(Alignment.TopEnd)
+
+                )
+
+            }
+
+
+            product.title?.let {
+                ShopTexts.BodyBold(
+                    text = it,
+                    fontSize = 16.sp,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(
+                            horizontal = 5.dp
+                        ),
+                    textAlign = TextAlign.Center,
+                    maxLines = 2
+
+                )
+            }
+            product.price?.let {
+                ShopTexts.BodyBold(
+                    text = it +" ₺",
+                    fontSize = 16.sp,
+                    textAlign = TextAlign.End,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(end = 5.dp)
+                )
+            }
+        }
+    }
+
+    @Composable
+    fun CartProductList(
         productList : List<CartProduct>,
         modifier: Modifier
     ) {
@@ -36,14 +130,14 @@ object ShopList {
             modifier = modifier
         ){
             items(productList){ product ->
-                ProductRow(product = product)
+                CartProductRow(product = product)
 
             }
         }
     }
 
     @Composable
-    fun ProductRow(
+    fun CartProductRow(
         product : CartProduct
     ){
         Row (
@@ -102,6 +196,16 @@ object ShopList {
 }
 
 
+
+@Preview(showBackground =true)
+@Composable
+fun ProductItemPreview(){
+    val product = CartProduct("1234","Nestle Çilekli Çikolata","15.0","",0)
+    val product2 = CartProduct("1234","Nestle Çikolata","205.0","",0)
+
+    val list = listOf<CartProduct>(product,product2)
+   // ProductList(list, modifier = Modifier.fillMaxSize())
+}
 
 
 
