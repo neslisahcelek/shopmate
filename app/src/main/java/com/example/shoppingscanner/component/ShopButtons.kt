@@ -1,5 +1,6 @@
 package com.example.shoppingscanner.component
 
+import android.graphics.Paint.Align
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
@@ -10,8 +11,10 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -64,14 +67,39 @@ object ShopButtons {
             Text(text = text)
         }
     }
+    @Composable
+    fun AddList(
+        enabled: Boolean = true,
+        onClick: () -> Unit,
+        modifier: Modifier
+    ) {
+        Button(
+            modifier = modifier
+                .width(50.dp)
+                .height(50.dp),
+            enabled = enabled,
+            colors = ButtonDefaults.buttonColors(
+                containerColor = PurplePrimary,
+                contentColor = Color.White
+            ),
+            contentPadding = PaddingValues(top = 12.dp, bottom = 12.dp, start = 16.dp, end = 16.dp),
+            onClick = onClick,
+            shape = RoundedCornerShape(16.dp)
+        ){
+            Text(
+                text = "+",
+                textAlign= TextAlign.Center,
+                color = Color.White,
+                fontSize = 20.sp,
+                )
+        }
+    }
 }
 @Composable
 @Preview(showBackground = true)
 fun ButtonsPreview(){
     Column {
-        ShopButtons.Primary(text = "Primary", onClick = {})
-        Spacer(modifier = Modifier.height(10.dp))
-        ShopButtons.Small(text = "Small", onClick = {}, modifier = Modifier)
+        ShopButtons.AddList( onClick = { /*TODO*/ }, modifier = Modifier)
     }
 
 }
