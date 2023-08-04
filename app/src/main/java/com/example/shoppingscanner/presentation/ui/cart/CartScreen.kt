@@ -52,7 +52,7 @@ fun CartScreen(
         )
 
         Box(modifier = Modifier.fillMaxHeight(0.8f)){
-            ShopList.ProductList(
+            ShopList.CartProductList(
                 productList = state.cartProducts,
                 modifier = Modifier
                 )
