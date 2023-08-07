@@ -135,15 +135,15 @@ object ShopList {
             modifier = modifier
         ){
             items(productList){ product ->
-                ShoppingProductRow(product = product)
-
+                ShoppingProductRow(
+                    product = product)
             }
         }
     }
 
     @Composable
     fun ShoppingProductRow(
-        product : ListProduct
+        product : ListProduct,
     ){
         Row (
             modifier = Modifier
@@ -172,11 +172,10 @@ object ShopList {
                 )
             }
             Checkbox(
-                checked = false,
-                onCheckedChange = {
-                    true
-                })
-
+                checked = product.isInCart ?: false,
+                onCheckedChange = { newCheckedValue ->
+                }
+            )
         }
     }
 
