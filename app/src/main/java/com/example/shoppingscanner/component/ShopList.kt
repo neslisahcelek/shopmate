@@ -21,7 +21,11 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Card
+import androidx.compose.material3.Checkbox
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ImageBitmap
@@ -34,6 +38,7 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.example.shoppingscanner.R
 import com.example.shoppingscanner.component.ShopList.ProductList
+import com.example.shoppingscanner.component.ShopList.ShoppingProductList
 import com.example.shoppingscanner.domain.dto.CartProduct
 import com.example.shoppingscanner.domain.dto.ListProduct
 
@@ -121,6 +126,61 @@ object ShopList {
     }
 
     @Composable
+    fun ShoppingProductList(
+        productList : List<ListProduct>,
+        modifier: Modifier
+    ) {
+        LazyColumn(
+            contentPadding = PaddingValues(5.dp),
+            modifier = modifier
+        ){
+            items(productList){ product ->
+                ShoppingProductRow(product = product)
+
+            }
+        }
+    }
+
+    @Composable
+    fun ShoppingProductRow(
+        product : ListProduct
+    ){
+        Row (
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(80.dp)
+                .padding(start = 8.dp, end = 8.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceAround
+        ){
+            Image(
+                bitmap = ImageBitmap.imageResource(id = R.drawable.purpledot),
+                contentDescription = "",
+                modifier = Modifier
+                    .width(30.dp)
+                    .height(30.dp),
+            )
+            Spacer(modifier = Modifier.width(15.dp))
+
+            product.title?.let {
+                ShopTexts.BodyRegular(
+                    text = it,
+                    fontSize = 16.sp,
+                    textAlign = TextAlign.Start,
+                    modifier = Modifier.width(190.dp)
+
+                )
+            }
+            Checkbox(
+                checked = false,
+                onCheckedChange = {
+                    true
+                })
+
+        }
+    }
+
+    @Composable
     fun CartProductList(
         productList : List<CartProduct>,
         modifier: Modifier
@@ -203,8 +263,13 @@ fun ProductItemPreview(){
     val product = CartProduct("1234","Nestle Çilekli Çikolata","15.0","",0)
     val product2 = CartProduct("1234","Nestle Çikolata","205.0","",0)
 
-    val list = listOf<CartProduct>(product,product2)
-   // ProductList(list, modifier = Modifier.fillMaxSize())
+    val product3 = ListProduct("1234","dlcld Nestle Çilekli Çikolata","135.0","","çikolata","nestle")
+    val product4 = ListProduct("1234","Eti Çikolata","205.0","","çikolata","nestle")
+    val product5 = ListProduct("1234","dlcld Nestle Çilekli Çikolata","135.0","","çikolata","nestle")
+    val product6 = ListProduct("1234","Eti Çikolata","205.0","","çikolata","nestle")
+
+    val list = listOf<ListProduct>(product3,product4)
+    ShoppingProductList(list, modifier = Modifier.fillMaxSize())
 }
 
 
