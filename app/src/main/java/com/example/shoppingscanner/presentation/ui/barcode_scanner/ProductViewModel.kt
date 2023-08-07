@@ -10,6 +10,7 @@ import com.example.shoppingscanner.domain.repository.BarcodeRepository
 import com.example.shoppingscanner.domain.usecase.GetProduct
 import com.example.shoppingscanner.presentation.ui.base.BaseEvent
 import com.example.shoppingscanner.presentation.ui.base.BaseViewModel
+import com.example.shoppingscanner.presentation.ui.productlist.ProductListState
 import com.example.shoppingscanner.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
@@ -26,6 +27,21 @@ class ProductViewModel @Inject constructor(
 
     private val _state = mutableStateOf(BarcodeScannerState())
     val state : State<BarcodeScannerState> = _state
+
+    val shopList = ProductListState().shoppingList
+    fun onEvent(event:BaseEvent){
+        when (event){
+            is BaseEvent.GetData -> {
+                getBarcode()
+            }
+            is BaseEvent.OnHandledMessage -> {
+                _state.value.copy(messageId = null)
+            }
+            is BaseEvent.ShowListInfo -> {
+                showListInfo()
+            }
+        }
+    }
 
     fun getBarcode(){
         viewModelScope.launch {
@@ -61,21 +77,6 @@ class ProductViewModel @Inject constructor(
         }.launchIn(viewModelScope)
     }
 
-
-
-    fun onEvent(event:BaseEvent){
-        when (event){
-            is BaseEvent.GetData -> {
-                getBarcode()
-            }
-            is BaseEvent.OnHandledMessage -> {
-                _state.value.copy(messageId = null)
-            }
-
-            else -> {}
-        }
-    }
-
     fun addToCart() {
         val currentProduct = state.value.product
         val existingProduct = _state.value.cartProducts.find {
@@ -85,11 +86,44 @@ class ProductViewModel @Inject constructor(
             existingProduct.quantity++
         } else {
             currentProduct!!.quantity = 1
-            _state.value = _state.value.copy(cartProducts = _state.value.cartProducts + currentProduct)
+            _state.value = _state.value.copy(
+                cartProducts = _state.value.cartProducts + currentProduct
+            )
+            checkShoppingList()
         }
 
         _state.value = _state.value.copy(totalPrice = calculateTotalPrice())
 
+    }
+
+    fun checkShoppingList(){
+        val cartProducts = state.value.cartProducts
+        shopList?.size?.let {
+            if(it <= cartProducts.size){
+                shopList?.let { shoppingList ->
+                    for (productInList in shoppingList) {
+                        val productFoundInCart = cartProducts.find {
+                            it.barcode_number == productInList.barcode_number
+                        }
+
+                        if (productFoundInCart == null) {
+                            productInList.isInCart = false
+                            _state.value = state.value.copy(
+                                missingProducts=state.value.missingProducts + productInList
+                            )
+                        }else{
+                            productInList.isInCart = true
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private fun showListInfo() {
+        if (!state.value.missingProducts.isEmpty()){
+            TODO("show dialog")
+        }
     }
 
     private fun calculateTotalPrice(): Double {

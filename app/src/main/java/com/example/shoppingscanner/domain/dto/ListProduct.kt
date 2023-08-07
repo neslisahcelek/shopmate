@@ -6,5 +6,6 @@ data class ListProduct(
     val price: String?,
     val image:String?,
     val category:String?,
-    val brand:String?
+    val brand:String?,
+    var isInCart:Boolean? = false
 )
