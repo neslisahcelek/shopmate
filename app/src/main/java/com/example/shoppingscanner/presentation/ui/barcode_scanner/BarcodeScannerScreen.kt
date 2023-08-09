@@ -1,10 +1,5 @@
 package com.example.shoppingscanner.presentation.ui.barcode_scanner
 
-import android.view.ViewGroup.LayoutParams.MATCH_PARENT
-import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
-import android.widget.LinearLayout
-import androidx.camera.view.LifecycleCameraController
-import androidx.camera.view.PreviewView
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -17,34 +12,48 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.filled.ShoppingCart
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.viewinterop.AndroidView
 import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
+import coil.compose.AsyncImage
 import com.example.shoppingscanner.R
-import com.example.shoppingscanner.presentation.ui.Screen
-import com.example.shoppingscanner.presentation.ui.theme.PurplePrimary
 import com.example.shoppingscanner.component.ShopButtons
+import com.example.shoppingscanner.component.ShopList
 import com.example.shoppingscanner.component.ShopTexts
+import com.example.shoppingscanner.domain.dto.ListProduct
+import com.example.shoppingscanner.presentation.ui.Screen
 import com.example.shoppingscanner.presentation.ui.base.BaseEvent
+import com.example.shoppingscanner.presentation.ui.theme.Purple80
+import com.example.shoppingscanner.presentation.ui.theme.PurplePrimary
 import com.example.shoppingscanner.util.showToast
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 
 @Composable
@@ -53,11 +62,13 @@ fun BarcodeScannerScreen(
     viewModel : ProductViewModel
     ) {
     val state by rememberUpdatedState(newValue = viewModel.state.value)
+    val shoppingList = viewModel.shoppingListState.value.shoppingList
+    println(shoppingList?.size)
 
     val context = LocalContext.current
-    val lifecycleOwner = LocalLifecycleOwner.current
-    val cameraController = remember {
-        LifecycleCameraController(context)
+
+    var isClicked by remember {
+        mutableStateOf(false)
     }
 
     state.messageId?.let {
@@ -73,10 +84,13 @@ fun BarcodeScannerScreen(
         )
     }
 
+    var isShoppingListVisible by remember {
+        mutableStateOf(false)
+    }
+
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.Blue)
     ) {
         Column(
             modifier = Modifier
@@ -92,26 +106,15 @@ fun BarcodeScannerScreen(
             }
 
             Box {
-                AndroidView(
-
-                    factory = { context ->
-                        PreviewView(context).apply {
-                            layoutParams = LinearLayout.LayoutParams(MATCH_PARENT,WRAP_CONTENT)
-                            scaleType = PreviewView.ScaleType.FILL_CENTER
-                        }.also {previewView ->
-                            previewView.controller = cameraController
-                            cameraController.bindToLifecycle(lifecycleOwner)
-                        }
-                    },
-                    modifier = Modifier.fillMaxHeight()
-                ){ previewView ->
-
-
-                }
+                AsyncImage(
+                    model = state.product?.image,
+                    contentDescription = "Product image",
+                    contentScale = ContentScale.Fit,
+                    modifier = Modifier
+                        .padding(15.dp)
+                )
 
             }
-
-
         }
             Column(
                 modifier = Modifier
@@ -215,22 +218,91 @@ fun BarcodeScannerScreen(
                             ShopButtons.Small(
                                 text = stringResource(R.string.buy_now),
                                 onClick = {
-                                    navController.navigate(Screen.CartScreen.route)
+                                    isClicked = true
                                 },
                                 modifier = Modifier.constrainAs(buyNowButton) {
                                     bottom.linkTo(parent.bottom)
                                     end.linkTo(parent.end)
                                 }
                             )
+                    if (isClicked) {
+                        if (state.cartProducts.isNullOrEmpty()){
+                            showToast(context, stringResource(id = R.string.cart_is_empty))
+                            isClicked = false
+                        }
+                        else if (state.missingProducts.isNullOrEmpty()) {
+                            isClicked = false
+                            navController.navigate(Screen.CartScreen.route)
+                        }else{
+                            showListInfo(navController)
+                        }
+                    }
                 }
 
             }
-
-
+        IconButton(
+            onClick = { isShoppingListVisible = true },
+            modifier = Modifier.align(Alignment.TopEnd)
+        ) {
+            Icon(
+                imageVector = Icons.Default.List,
+                tint = PurplePrimary,
+                contentDescription = null
+            )
         }
-
+        if (isShoppingListVisible) {
+            shoppingList?.let { ShoppingList(list = it) }
+        }
+        }
     }
 
+@Composable
+private fun showListInfo(navController: NavController) {
+    AlertDialog(
+        modifier = Modifier,
+        onDismissRequest = {
+
+        },
+        title = { Text(text = stringResource(R.string.barcode_scanner_dialog_title)) },
+        text = { Text(text = stringResource(R.string.barcode_scanner_dialog_message)) },
+        confirmButton = {
+            ShopButtons.Small(
+                text = stringResource(R.string.dialog_confirm_button),
+                onClick = {
+                    navController.navigate(Screen.CartScreen.route)
+                },
+                modifier = Modifier.width(100.dp)
+                    .height(40.dp)
+            )
+        },
+        dismissButton = {
+            ShopButtons.Small(
+                text = stringResource(R.string.dialog_dismiss_button),
+                onClick = {
+
+                },
+                modifier = Modifier.width(100.dp)
+                    .height(40.dp)
+            )
+        },
+    )
+}
+
+
+@Composable
+fun ShoppingList(
+    list : List<ListProduct>
+) {
+    list.let {
+        ShopList.ShoppingProductList(
+            productList = it,
+            modifier = Modifier
+                .padding(20.dp, vertical = 40.dp)
+                .background(Purple80)
+                .fillMaxWidth(),
+            )
+    }
+}
 
 
 
