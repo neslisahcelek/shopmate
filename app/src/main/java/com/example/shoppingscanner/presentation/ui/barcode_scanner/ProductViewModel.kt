@@ -32,8 +32,6 @@ class ProductViewModel @Inject constructor(
     private val _productListState = mutableStateOf(ProductListState())
     val productListState : State<ProductListState> = _productListState
 
-    //var shopList = productListState.value.shoppingList
-
     var shoppingListState: State<ShoppingListState> = sharedViewModel.shoppingListState
 
 
@@ -45,9 +43,6 @@ class ProductViewModel @Inject constructor(
             is BaseEvent.OnHandledMessage -> {
                 _state.value.copy(messageId = null)
             }
-            is BaseEvent.ShowListInfo -> {
-                showListInfo()
-            }
         }
     }
 
@@ -56,7 +51,6 @@ class ProductViewModel @Inject constructor(
         viewModelScope.launch {
             barcodeRepo.scan().collect(){
                 if(!it.isNullOrBlank()){
-                    println("scan success")
                     getProductFromAPI(it)
                 }else{
                     _state.value.copy(
@@ -80,8 +74,6 @@ class ProductViewModel @Inject constructor(
                 is Resource.Loading -> {
                     _state.value = state.value.copy(isLoading = true)
                 }
-
-                else -> {}
             }
         }.launchIn(viewModelScope)
     }
@@ -127,13 +119,6 @@ class ProductViewModel @Inject constructor(
                     }
                 }
             }
-        }
-    }
-
-
-    private fun showListInfo() {
-        if (!state.value.missingProducts.isEmpty()){
-            TODO("show dialog")
         }
     }
 
