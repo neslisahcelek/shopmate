@@ -1,14 +1,14 @@
 package com.example.shoppingscanner.component
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -19,28 +19,32 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardColors
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Checkbox
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.imageResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.example.shoppingscanner.R
-import com.example.shoppingscanner.component.ShopList.ProductList
 import com.example.shoppingscanner.component.ShopList.ShoppingProductList
 import com.example.shoppingscanner.domain.dto.CartProduct
 import com.example.shoppingscanner.domain.dto.ListProduct
+import com.example.shoppingscanner.presentation.ui.theme.Purple80
+import com.example.shoppingscanner.presentation.ui.theme.PurplePrimary
 
 
 object ShopList {
@@ -66,60 +70,65 @@ object ShopList {
 
     @Composable
     fun ProductItem(
-        product : ListProduct,
+        product: ListProduct,
         onClick: () -> Unit
-    ){
-        Column (
-            modifier = Modifier.fillMaxSize(),
-        ) {
-            Box(modifier = Modifier
+    ) {
+        Card(
+            colors = CardDefaults.cardColors(containerColor = Color.White),
+            border = BorderStroke(2.dp, Purple80),
+            shape = MaterialTheme.shapes.extraSmall,
+            modifier = Modifier
                 .fillMaxWidth()
-                .height(160.dp)
-            ){
-                Image(
-                    bitmap = ImageBitmap
-                        .imageResource(id = R.drawable.shoppingcar),
-                    modifier = Modifier
-                        .fillMaxWidth(0.8f)
-                        .fillMaxHeight()
-                        .padding(
-                            horizontal = 8.dp
-                        ),
-                    alignment = Alignment.Center,
-                    contentDescription = "",
-                )
+                .padding(8.dp)
 
-                ShopButtons.AddList(
-                    onClick = onClick,
-                    modifier = Modifier.align(Alignment.TopEnd)
-
-                )
-
-            }
-
-
-            product.title?.let {
-                ShopTexts.BodyBold(
-                    text = it,
-                    fontSize = 16.sp,
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(8.dp)
+            ) {
+                Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(
-                            horizontal = 5.dp
-                        ),
-                    textAlign = TextAlign.Center,
-                    maxLines = 2
+                        .height(160.dp)
+                ) {
+                    AsyncImage(
+                        model = product.image,
+                        contentDescription = "Product image",
+                        contentScale = ContentScale.Fit,
+                        modifier = Modifier
+                            .padding(top = 20.dp, bottom = 3.dp)
+                            .fillMaxSize()
+                    )
 
-                )
-            }
-            product.price?.let {
-                ShopTexts.BodyBold(
-                    text = it +" ₺",
+                    ShopButtons.AddList(
+                        onClick = onClick,
+                        modifier = Modifier
+                            .align(Alignment.TopEnd)
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                Text(
+                    text = product.title ?: "",
                     fontSize = 16.sp,
-                    textAlign = TextAlign.End,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.fillMaxWidth(),
+                    textAlign = TextAlign.Start,
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis
+                )
+
+                Spacer(modifier = Modifier.height(4.dp))
+
+                Text(
+                    text = "${product.price ?: ""} ₺",
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Bold,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(end = 5.dp)
+                        .align(Alignment.End)
                 )
             }
         }
@@ -259,15 +268,21 @@ object ShopList {
 @Preview(showBackground =true)
 @Composable
 fun ProductItemPreview(){
-    val product = CartProduct("1234","Nestle Çilekli Çikolata","15.0","",0)
-    val product2 = CartProduct("1234","Nestle Çikolata","205.0","",0)
 
-    val product3 = ListProduct("1234","dlcld Nestle Çilekli Çikolata","135.0","","çikolata","nestle")
-    val product4 = ListProduct("1234","Eti Çikolata","205.0","","çikolata","nestle")
-    val product5 = ListProduct("1234","dlcld Nestle Çilekli Çikolata","135.0","","çikolata","nestle")
-    val product6 = ListProduct("1234","Eti Çikolata","205.0","","çikolata","nestle")
+    val list = listOf<ListProduct>(
+        ListProduct("1", "Nestle Çilekli Çikolata", "15.0", "https://example.com/image1.jpg", "Çikolata", "Nestle"),
+        ListProduct("2", "Eti Bademli Çikolata", "25.0", "https://example.com/image2.jpg", "Çikolata", "Eti"),
+        ListProduct("3", "Milka Sütlü Çikolata", "10.0", "https://example.com/image3.jpg", "Çikolata", "Milka"),
+        ListProduct("4", "Ülker Bitter Çikolata", "18.5", "https://example.com/image4.jpg", "Çikolata", "Ülker"),
+        ListProduct("5", "Godiva Fındıklı Çikolata", "40.0", "https://example.com/image5.jpg", "Çikolata", "Godiva"),
+        ListProduct("6", "Cadbury Karamelli Çikolata", "12.75", "https://example.com/image6.jpg", "Çikolata", "Cadbury"),
+        ListProduct("7", "Lindt Bitter Portakallı Çikolata", "30.0", "https://example.com/image7.jpg", "Çikolata", "Lindt"),
+        ListProduct("8", "Toblerone Bademli Çikolata", "22.5", "https://example.com/image8.jpg", "Çikolata", "Toblerone"),
+        ListProduct("9", "Anthon Berg Çikolatalı Likör", "50.0", "https://example.com/image9.jpg", "Çikolata", "Anthon Berg"),
+        ListProduct("10", "Ritter Sport Fıstıklı Çikolata", "14.0", "https://example.com/image10.jpg", "Çikolata", "Ritter Sport"),
+        ListProduct("11", "Ferrero Rocher Findik", "28.5", "https://example.com/image11.jpg", "Çikolata", "Ferrero")
 
-    val list = listOf<ListProduct>(product3,product4)
+    )
     ShoppingProductList(list, modifier = Modifier.fillMaxSize())
 }
 
