@@ -8,6 +8,8 @@ import com.example.shoppingscanner.R
 import com.example.shoppingscanner.domain.dto.ListProduct
 import com.example.shoppingscanner.domain.usecase.GetProductList
 import com.example.shoppingscanner.presentation.ui.base.BaseEvent
+import com.example.shoppingscanner.presentation.ui.shared.SharedViewModel
+import com.example.shoppingscanner.presentation.ui.shared.ShoppingListState
 import com.example.shoppingscanner.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
@@ -17,12 +19,16 @@ import javax.inject.Inject
 @HiltViewModel
 class ProductListViewModel @Inject constructor(
     private val getProductListUseCase: GetProductList,
-) : ViewModel() {
+    private val sharedViewModel: SharedViewModel,
+    ) : ViewModel() {
 
     private val _state = mutableStateOf(ProductListState())
     val state : State<ProductListState> = _state
 
     var productList: List<ListProduct>? = listOf()
+
+    var shoppingListState: State<ShoppingListState> = sharedViewModel.shoppingListState
+
 
     fun getProductListFromAPI() {
         getProductListUseCase.executeGetProductList().onEach {
@@ -39,26 +45,26 @@ class ProductListViewModel @Inject constructor(
                 is Resource.Loading -> {
                     _state.value = state.value.copy(isLoading = true)
                 }
-
-                else -> {}
             }
         }.launchIn(viewModelScope)
     }
 
     fun addToList(currentProduct:ListProduct) {
-        val existingProduct = _state.value.shoppingList?.find {
+        var shoppingList = shoppingListState.value.shoppingList
+
+        val existingProduct = shoppingList.find {
             it.barcode_number == currentProduct?.barcode_number
         }
-
         if (existingProduct != null) {
             _state.value.copy(messageId = R.string.product_exist)
         } else {
             _state.value = _state.value.copy(
                 shoppingList = _state.value.shoppingList?.plus(currentProduct),
-                messageId = R.string.product_added
             )
-        }
+            shoppingListState.value.shoppingList = shoppingList.plus(currentProduct)
 
+            println(shoppingListState.value!!.shoppingList.size)
+        }
     }
 
     fun onEvent(event: BaseEvent){

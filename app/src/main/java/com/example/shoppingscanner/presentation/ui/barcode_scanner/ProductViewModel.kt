@@ -1,6 +1,5 @@
 package com.example.shoppingscanner.presentation.ui.barcode_scanner
 
-import android.app.usage.UsageEvents
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
@@ -9,8 +8,9 @@ import com.example.shoppingscanner.R
 import com.example.shoppingscanner.domain.repository.BarcodeRepository
 import com.example.shoppingscanner.domain.usecase.GetProduct
 import com.example.shoppingscanner.presentation.ui.base.BaseEvent
-import com.example.shoppingscanner.presentation.ui.base.BaseViewModel
 import com.example.shoppingscanner.presentation.ui.productlist.ProductListState
+import com.example.shoppingscanner.presentation.ui.shared.SharedViewModel
+import com.example.shoppingscanner.presentation.ui.shared.ShoppingListState
 import com.example.shoppingscanner.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
@@ -22,13 +22,21 @@ import javax.inject.Inject
 @HiltViewModel
 class ProductViewModel @Inject constructor(
     private val getProductUseCase:GetProduct,
-    private val barcodeRepo:BarcodeRepository
-) : ViewModel() {
+    private val barcodeRepo:BarcodeRepository,
+    private val sharedViewModel: SharedViewModel,
+    ) : ViewModel() {
 
     private val _state = mutableStateOf(BarcodeScannerState())
     val state : State<BarcodeScannerState> = _state
 
-    val shopList = ProductListState().shoppingList
+    private val _productListState = mutableStateOf(ProductListState())
+    val productListState : State<ProductListState> = _productListState
+
+    //var shopList = productListState.value.shoppingList
+
+    var shoppingListState: State<ShoppingListState> = sharedViewModel.shoppingListState
+
+
     fun onEvent(event:BaseEvent){
         when (event){
             is BaseEvent.GetData -> {
@@ -44,6 +52,7 @@ class ProductViewModel @Inject constructor(
     }
 
     fun getBarcode(){
+        println(productListState.value.productList?.size)
         viewModelScope.launch {
             barcodeRepo.scan().collect(){
                 if(!it.isNullOrBlank()){
@@ -98,6 +107,7 @@ class ProductViewModel @Inject constructor(
 
     fun checkShoppingList(){
         val cartProducts = state.value.cartProducts
+        var shopList = shoppingListState.value.shoppingList
         shopList?.size?.let {
             if(it <= cartProducts.size){
                 shopList?.let { shoppingList ->
@@ -119,6 +129,7 @@ class ProductViewModel @Inject constructor(
             }
         }
     }
+
 
     private fun showListInfo() {
         if (!state.value.missingProducts.isEmpty()){

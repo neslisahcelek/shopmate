@@ -7,6 +7,7 @@ import com.example.shoppingscanner.data.repository.BarcodeRepositoryImpl
 import com.example.shoppingscanner.data.repository.ProductRepositoryImpl
 import com.example.shoppingscanner.domain.repository.BarcodeRepository
 import com.example.shoppingscanner.domain.repository.ProductRepository
+import com.example.shoppingscanner.presentation.ui.shared.SharedViewModel
 import com.google.mlkit.vision.barcode.common.Barcode
 import com.google.mlkit.vision.codescanner.GmsBarcodeScanner
 import com.google.mlkit.vision.codescanner.GmsBarcodeScannerOptions
@@ -14,7 +15,6 @@ import com.google.mlkit.vision.codescanner.GmsBarcodeScanning
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.scopes.ViewModelScoped
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
@@ -45,5 +45,11 @@ object AppModule{
     @Provides
     fun providesScanner(context:Context,options: GmsBarcodeScannerOptions): GmsBarcodeScanner{
         return GmsBarcodeScanning.getClient(context,options)
+    }
+
+    @Provides
+    @Singleton
+    fun provideSharedViewModel(): SharedViewModel {
+        return SharedViewModel()
     }
 }
