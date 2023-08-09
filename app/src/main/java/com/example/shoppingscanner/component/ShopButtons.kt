@@ -1,6 +1,7 @@
 package com.example.shoppingscanner.component
 
 import android.graphics.Paint.Align
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
@@ -18,6 +19,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.shoppingscanner.presentation.ui.theme.Purple80
 import com.example.shoppingscanner.presentation.ui.theme.PurplePrimary
 
 object ShopButtons {
@@ -25,12 +27,16 @@ object ShopButtons {
     fun Primary(
         text: String,
         enabled: Boolean = true,
-        onClick: () -> Unit
+        onClick: () -> Unit,
+        modifier: Modifier? = Modifier
     ) {
         Button(
-            modifier = Modifier
-                .height(48.dp)
-                .width(300.dp),
+            modifier = modifier
+                ?.height(48.dp)
+                ?.width(300.dp) ?:
+                Modifier
+                    .height(48.dp)
+                    .width(300.dp),
             enabled = enabled,
             colors = ButtonDefaults.buttonColors(
                 containerColor = PurplePrimary,
@@ -78,19 +84,19 @@ object ShopButtons {
                 .width(50.dp)
                 .height(50.dp),
             enabled = enabled,
+            border = BorderStroke(2.dp, PurplePrimary),
             colors = ButtonDefaults.buttonColors(
-                containerColor = PurplePrimary,
-                contentColor = Color.White
+                containerColor = Color.White,
+                contentColor = Purple80
             ),
-            contentPadding = PaddingValues(top = 12.dp, bottom = 12.dp, start = 16.dp, end = 16.dp),
             onClick = onClick,
             shape = RoundedCornerShape(16.dp)
         ){
             Text(
                 text = "+",
                 textAlign= TextAlign.Center,
-                color = Color.White,
-                fontSize = 20.sp,
+                color = PurplePrimary,
+                fontSize = 24.sp,
                 )
         }
     }
