@@ -6,5 +6,4 @@ sealed class BaseEvent{
     class GetData() : BaseEvent()
 
     data class OnHandledMessage(val message : String) : BaseEvent()
-    class ShowListInfo() : BaseEvent()
 }
