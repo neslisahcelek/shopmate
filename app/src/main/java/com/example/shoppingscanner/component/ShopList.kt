@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
@@ -26,6 +27,11 @@ import androidx.compose.material3.Checkbox
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -43,6 +49,7 @@ import com.example.shoppingscanner.R
 import com.example.shoppingscanner.component.ShopList.ShoppingProductList
 import com.example.shoppingscanner.domain.dto.CartProduct
 import com.example.shoppingscanner.domain.dto.ListProduct
+import com.example.shoppingscanner.presentation.ui.productlist.ProductListViewModel
 import com.example.shoppingscanner.presentation.ui.theme.Purple80
 import com.example.shoppingscanner.presentation.ui.theme.PurplePrimary
 
@@ -162,15 +169,6 @@ object ShopList {
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceAround
         ){
-            Image(
-                bitmap = ImageBitmap.imageResource(id = R.drawable.purpledot),
-                contentDescription = "",
-                modifier = Modifier
-                    .width(30.dp)
-                    .height(30.dp),
-            )
-            Spacer(modifier = Modifier.width(15.dp))
-
             product.title?.let {
                 ShopTexts.BodyRegular(
                     text = it,
@@ -186,6 +184,51 @@ object ShopList {
                 }
             )
         }
+    }
+    @Composable
+    fun CategoryList(
+        modifier: Modifier,
+        viewModel : ProductListViewModel
+    ) {
+        val selectedCategory = remember { mutableStateOf("") }
+        LazyRow(
+            contentPadding = PaddingValues(),
+            modifier = modifier
+        ){
+            val categoryList = mutableListOf<String>(
+                "Dekorasyon",
+                "Ayakkabı",
+                "Çanta",
+                "Koltuk"
+            )
+            items(categoryList){ category ->
+                CategoryItem(
+                    category = category,
+                    viewModel = viewModel,
+                    selectedCategory = selectedCategory,
+                )
+            }
+        }
+    }
+
+    @Composable
+    fun CategoryItem(
+        category : String,
+        viewModel : ProductListViewModel,
+        selectedCategory: MutableState<String>
+    ){
+        val isSelected = selectedCategory.value == category
+
+        ShopButtons.Category(
+            onClick ={
+                selectedCategory.value = category
+                viewModel.getProductListFromAPI(category)
+            },
+            text = category,
+            modifier = Modifier
+                .padding(horizontal = 5.dp),
+            isSelected = isSelected
+        )
     }
 
     @Composable
@@ -283,7 +326,7 @@ fun ProductItemPreview(){
         ListProduct("11", "Ferrero Rocher Findik", "28.5", "https://example.com/image11.jpg", "Çikolata", "Ferrero")
 
     )
-    ShoppingProductList(list, modifier = Modifier.fillMaxSize())
+    //ShopList.CategoryList(modifier = Modifier.fillMaxSize())
 }
 
 

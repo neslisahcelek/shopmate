@@ -30,8 +30,19 @@ class ProductListViewModel @Inject constructor(
     var shoppingListState: State<ShoppingListState> = sharedViewModel.shoppingListState
 
 
-    fun getProductListFromAPI() {
-        getProductListUseCase.executeGetProductList().onEach {
+    private fun setCategoryName(category: String): String {
+        return when (category) {
+            "Ayakkabı" -> "shoe"
+            "Çanta" -> "luggage"
+            "Dekorasyon" -> "home"
+            "Koltuk" -> "chair"
+            else -> "shoe"
+        }
+    }
+
+    fun getProductListFromAPI(category:String) {
+        val apiCategory = setCategoryName(category)
+        getProductListUseCase.executeGetProductList(apiCategory).onEach {
             when(it){
                 is Resource.Success -> {
                     productList = it.data
@@ -70,13 +81,13 @@ class ProductListViewModel @Inject constructor(
     fun onEvent(event: BaseEvent){
         when (event){
             is BaseEvent.GetData -> {
-                getProductListFromAPI()
+                getProductListFromAPI(event.category)
             }
             is BaseEvent.OnHandledMessage -> {
                 _state.value.copy(messageId = null)
-            }
+            }else -> {
 
-            else -> {}
+            }
         }
     }
 

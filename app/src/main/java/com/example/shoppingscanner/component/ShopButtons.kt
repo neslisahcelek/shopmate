@@ -12,6 +12,11 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -20,6 +25,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.shoppingscanner.presentation.ui.theme.Purple80
+import com.example.shoppingscanner.presentation.ui.theme.PurpleGrey40
+import com.example.shoppingscanner.presentation.ui.theme.PurpleGrey80
 import com.example.shoppingscanner.presentation.ui.theme.PurplePrimary
 
 object ShopButtons {
@@ -33,10 +40,9 @@ object ShopButtons {
         Button(
             modifier = modifier
                 ?.height(48.dp)
-                ?.width(300.dp) ?:
-                Modifier
-                    .height(48.dp)
-                    .width(300.dp),
+                ?.width(300.dp) ?: Modifier
+                .height(48.dp)
+                .width(300.dp),
             enabled = enabled,
             colors = ButtonDefaults.buttonColors(
                 containerColor = PurplePrimary,
@@ -59,7 +65,6 @@ object ShopButtons {
     ) {
         Button(
             modifier = modifier
-                .height(48.dp)
                 .width(160.dp),
             enabled = enabled,
             colors = ButtonDefaults.buttonColors(
@@ -70,7 +75,9 @@ object ShopButtons {
             onClick = onClick,
             shape = RoundedCornerShape(16.dp)
         ){
-            Text(text = text)
+            Text(
+                text = text,
+                fontSize = 18.sp)
         }
     }
     @Composable
@@ -100,12 +107,47 @@ object ShopButtons {
                 )
         }
     }
+
+    @Composable
+    fun Category(
+        enabled: Boolean = true,
+        onClick: () -> Unit,
+        modifier: Modifier,
+        text: String,
+        isSelected: Boolean
+    ) {
+        val buttonColors = if (isSelected) {
+            ButtonDefaults.buttonColors(
+                containerColor = PurplePrimary,
+                contentColor = Color.White
+            )
+        } else {
+            ButtonDefaults.buttonColors(
+                containerColor = Color.White,
+                contentColor = PurplePrimary
+            )
+        }
+        Button(
+            modifier = modifier,
+            enabled = enabled,
+            border = BorderStroke(2.dp, PurplePrimary),
+            colors = buttonColors,
+            onClick = onClick,
+            shape = RoundedCornerShape(16.dp)
+        ){
+            Text(
+                text = text,
+                textAlign= TextAlign.Center,
+                fontSize = 18.sp,
+            )
+        }
+    }
 }
 @Composable
 @Preview(showBackground = true)
 fun ButtonsPreview(){
     Column {
-        ShopButtons.AddList( onClick = { /*TODO*/ }, modifier = Modifier)
+        ShopButtons.Category( onClick = { /*TODO*/ }, modifier = Modifier, text = "Ayakkabı", isSelected = true)
     }
 
 }

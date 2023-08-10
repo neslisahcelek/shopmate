@@ -13,10 +13,10 @@ import javax.inject.Inject
 class GetProductList @Inject constructor(
     private val repository: ProductRepository
 ) {
-    fun executeGetProductList(): Flow<Resource<List<ListProduct>>> = flow {
+    fun executeGetProductList(category:String): Flow<Resource<List<ListProduct>>> = flow {
         try{
             emit(Resource.Loading())
-            val productList = repository.getProductList()
+            val productList = repository.getProductList(category)
             if(productList.products != null){
                 emit(Resource.Success(productList.toListProduct()))
             }else{

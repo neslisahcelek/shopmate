@@ -55,7 +55,7 @@ fun ProductListScreen(
         )
     }
     LaunchedEffect(key1 = viewModel){
-        viewModel.getProductListFromAPI()
+        viewModel.getProductListFromAPI(category = "Dekorasyon")
     }
 
     Surface(
@@ -65,22 +65,19 @@ fun ProductListScreen(
             modifier = Modifier,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            ShopTexts.LargeTitle(
+
+            ShopList.CategoryList(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 5.dp),
-                textAlign = TextAlign.Center,
-                fontSize = 28.sp,
-                text = stringResource(id = R.string.products)
+                    .padding(
+                        top=10.dp,
+                        start = 10.dp),
+                viewModel = viewModel
             )
 
-            Spacer(modifier = Modifier
-                .fillMaxWidth()
-                .height(2.dp)
-                .background(PurplePrimary))
-
             Box(
-                modifier = Modifier.fillMaxSize()
+                modifier = Modifier
+                    .fillMaxSize()
                     .align(Alignment.CenterHorizontally),
 
             ){
