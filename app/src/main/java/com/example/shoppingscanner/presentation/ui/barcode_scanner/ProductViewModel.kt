@@ -38,6 +38,9 @@ class ProductViewModel @Inject constructor(
     fun onEvent(event:BaseEvent){
         when (event){
             is BaseEvent.GetData -> {
+
+            }
+            is BaseEvent.GetProduct -> {
                 getBarcode()
             }
             is BaseEvent.OnHandledMessage -> {
