@@ -8,8 +8,10 @@
 
     <string name="products">Ürünler</string>
 
-    <string name="continue_info">Hadi Bekleme özelliği ile 5 ürüne kadarki alışverişlerinde sıra bekleme.
-        Ödemeyi beklemeden anında tamamla.</string>
+    <string name="continue_info">Burada alışveriş listenizi oluşturabilir,
+        market alışverişinizi kolayca yönetebilirsiniz! Alışveriş listenize istediğiniz ürünleri ekleyin.
+         Markette ürünleri okutarak sepetinizi doldurun ve eksikleri hızlıca görün.
+    </string>
     <string name="continue_with_barcode">Barkod İle Devam Et</string>
 
     <string name="product">Ürün:</string>
@@ -32,4 +34,13 @@
 
     <string name="product_exist">Bu ürün listenizde mevcut.</string>
     <string name="product_added">%s listenize eklendi.</string>
+
+    <string name="my_shopping_list">Alışveriş Listem</string>
+
+    <string name="barcode_scanner_dialog_title">Eksik Ürünleriniz Var</string>
+    <string name="barcode_scanner_dialog_message">Alışveriş listenizdeki ürünlerden bazılarını sepetinize eklemediniz. Yine de ödeme adımına geçmek istiyor musunuz?</string>
+    <string name="dialog_confirm_button">Evet</string>
+    <string name="dialog_dismiss_button">Hayır</string>
+    <string name="cart_is_empty">Lütfen sepetinize ürün ekleyin.</string>
+    <string name="show_products">Ürünleri Gör</string>
 </resources>
