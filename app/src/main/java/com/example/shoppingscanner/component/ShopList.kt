@@ -140,7 +140,37 @@ object ShopList {
             }
         }
     }
+    @Composable
+    fun BottomSheetProductList(
+        productList : List<ListProduct>,
+        modifier: Modifier
+    ) {
+        LazyColumn(
+            contentPadding = PaddingValues(5.dp),
+            modifier = modifier
+        ){
+            items(productList){ product ->
+                BottomSheetProductRow(
+                    product = product)
+            }
+        }
+    }
 
+    @Composable
+    fun BottomSheetProductRow(
+        product : ListProduct,
+    ){
+        product.title?.let {
+            ShopTexts.BodyRegular(
+                text = it,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
+                fontSize = 16.sp,
+                textAlign = TextAlign.Center,
+            )
+        }
+    }
     @Composable
     fun ShoppingProductList(
         productList : List<ListProduct>,
@@ -181,6 +211,7 @@ object ShopList {
             Checkbox(
                 checked = product.isInCart ?: false,
                 onCheckedChange = { newCheckedValue ->
+                    product.isInCart = newCheckedValue
                 }
             )
         }
@@ -196,10 +227,11 @@ object ShopList {
             modifier = modifier
         ){
             val categoryList = mutableListOf<String>(
-                "Dekorasyon",
                 "Ayakkabı",
                 "Çanta",
-                "Koltuk"
+                "Mont",
+                "Koltuk",
+                "Dekorasyon",
             )
             items(categoryList){ category ->
                 CategoryItem(
