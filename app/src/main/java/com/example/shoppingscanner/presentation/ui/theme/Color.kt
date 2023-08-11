@@ -2,8 +2,8 @@ package com.example.shoppingscanner.presentation.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-val Purple80 = Color(0xFFD0BCFF)
-val PurpleGrey80 = Color(0xFFCCC2DC)
+val Purple80 = Color(0xFAEADEFA)
+val PurpleGrey80 = Color(0xFFE5D9FA)
 val Pink80 = Color(0xFFEFB8C8)
 
 val PurplePrimary = Color(0xFF7F00FF)
