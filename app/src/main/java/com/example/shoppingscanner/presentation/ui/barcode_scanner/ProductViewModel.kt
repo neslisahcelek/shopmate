@@ -50,7 +50,6 @@ class ProductViewModel @Inject constructor(
     }
 
     fun getBarcode(){
-        println(productListState.value.productList?.size)
         viewModelScope.launch {
             barcodeRepo.scan().collect(){
                 if(!it.isNullOrBlank()){
@@ -103,26 +102,25 @@ class ProductViewModel @Inject constructor(
     fun checkShoppingList(){
         val cartProducts = state.value.cartProducts
         var shopList = shoppingListState.value.shoppingList
-        shopList?.size?.let {
-            if(it <= cartProducts.size){
-                shopList?.let { shoppingList ->
-                    for (productInList in shoppingList) {
-                        val productFoundInCart = cartProducts.find {
-                            it.barcode_number == productInList.barcode_number
-                        }
+        shopList?.let { shoppingList ->
+            for (productInList in shoppingList) {
+                val productFoundInCart = cartProducts.find {
+                    it.barcode_number == productInList.barcode_number
+                }
 
-                        if (productFoundInCart == null) {
-                            productInList.isInCart = false
-                            _state.value = state.value.copy(
-                                missingProducts=state.value.missingProducts + productInList
-                            )
-                        }else{
-                            productInList.isInCart = true
-                        }
-                    }
+                if (productFoundInCart == null) {
+                    productInList.isInCart = false
+                    _state.value = state.value.copy(
+                        missingProducts=state.value.missingProducts + productInList
+                    )
+                }else{
+                    productInList.isInCart = true
                 }
             }
         }
+        println("missing products: ${state.value.missingProducts.onEach { 
+            it.title
+        }} size: ${state.value.missingProducts.size}" )
     }
 
     private fun calculateTotalPrice(): Double {
