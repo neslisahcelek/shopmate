@@ -1,8 +1,11 @@
 package com.example.shoppingscanner.presentation.ui.barcode_scanner
 
+import androidx.annotation.DrawableRes
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -13,6 +16,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.List
@@ -32,8 +36,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.painter.BitmapPainter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -44,12 +50,16 @@ import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.example.shoppingscanner.R
 import com.example.shoppingscanner.component.ShopButtons
+import com.example.shoppingscanner.component.ShopDialogs
 import com.example.shoppingscanner.component.ShopList
 import com.example.shoppingscanner.component.ShopTexts
 import com.example.shoppingscanner.domain.dto.ListProduct
 import com.example.shoppingscanner.presentation.ui.Screen
 import com.example.shoppingscanner.presentation.ui.base.BaseEvent
+import com.example.shoppingscanner.presentation.ui.theme.Pink80
 import com.example.shoppingscanner.presentation.ui.theme.Purple80
+import com.example.shoppingscanner.presentation.ui.theme.PurpleGrey40
+import com.example.shoppingscanner.presentation.ui.theme.PurpleGrey80
 import com.example.shoppingscanner.presentation.ui.theme.PurplePrimary
 import com.example.shoppingscanner.util.showToast
 import kotlinx.coroutines.GlobalScope
@@ -63,11 +73,10 @@ fun BarcodeScannerScreen(
     ) {
     val state by rememberUpdatedState(newValue = viewModel.state.value)
     val shoppingList = viewModel.shoppingListState.value.shoppingList
-    println(shoppingList?.size)
 
     val context = LocalContext.current
 
-    var isClicked by remember {
+    var isDialogOpen by remember {
         mutableStateOf(false)
     }
 
@@ -94,35 +103,59 @@ fun BarcodeScannerScreen(
     ) {
         Column(
             modifier = Modifier
-                .fillMaxHeight(0.6f)
+                .fillMaxHeight(0.7f)
                 .fillMaxWidth()
                 .align(Alignment.TopCenter),
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            
+
             LaunchedEffect(key1 = viewModel){
-                viewModel.onEvent(BaseEvent.GetData())
+                viewModel.onEvent(BaseEvent.GetProduct())
             }
 
-            Box {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .fillMaxHeight(0.9f)
+
+            ){
                 AsyncImage(
                     model = state.product?.image,
                     contentDescription = "Product image",
                     contentScale = ContentScale.Fit,
                     modifier = Modifier
-                        .padding(15.dp)
+                        .align(Alignment.Center)
+                        .fillMaxWidth()
+                        .padding(20.dp)
                 )
+                IconButton(
+                    onClick = { viewModel.onEvent(BaseEvent.GetProduct()) },
+                    modifier = Modifier
+                        .align(Alignment.BottomCenter)
+                        .padding(bottom=30.dp)
+                        .border(3.dp, PurpleGrey40, CircleShape)
 
+                ) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.baseline_camera_alt_24),
+                        modifier = Modifier
+                            .size(40.dp)
+                            .padding(5.dp),
+                        tint = PurplePrimary,
+                        contentDescription = null
+                    )
+                }
             }
+
         }
             Column(
                 modifier = Modifier
-                    .fillMaxHeight(0.5f)
+                    .fillMaxHeight(0.4f)
                     .fillMaxWidth()
                     .align(Alignment.BottomCenter)
                     .background(
-                        color = Color.White, shape = RoundedCornerShape(
+                        color = Purple80, shape = RoundedCornerShape(
                             topEnd = 50.dp, topStart = 50.dp
                         )
                     )
@@ -218,30 +251,65 @@ fun BarcodeScannerScreen(
                             ShopButtons.Small(
                                 text = stringResource(R.string.buy_now),
                                 onClick = {
-                                    isClicked = true
+                                    viewModel.checkShoppingList()
+                                    isDialogOpen = true
                                 },
                                 modifier = Modifier.constrainAs(buyNowButton) {
                                     bottom.linkTo(parent.bottom)
                                     end.linkTo(parent.end)
                                 }
                             )
-                    if (isClicked) {
+                    if (isDialogOpen) {
                         if (state.cartProducts.isNullOrEmpty()){
+                            println("cart: ${state.cartProducts.size}")
                             showToast(context, stringResource(id = R.string.cart_is_empty))
-                            isClicked = false
+                            isDialogOpen = false
                         }
                         else if (state.missingProducts.isNullOrEmpty()) {
-                            isClicked = false
+                            println("missingprod: ${state.cartProducts.size}")
+                            isDialogOpen = false
                             navController.navigate(Screen.CartScreen.route)
                         }else{
-                            showListInfo(navController)
+                            println("alert")
+                            ShopDialogs.ShopDialog(
+                                modifier = Modifier,
+                                onDismissRequest = {
+                                    isDialogOpen = false },
+                                title = {
+                                    Text(
+                                        text = stringResource(R.string.barcode_scanner_dialog_title))
+                                        },
+                                text = {
+                                    Text(
+                                        text = stringResource(R.string.barcode_scanner_dialog_message),
+                                    )
+                                       },
+                                confirmButton = {
+                                    ShopButtons.Small(
+                                        text = stringResource(R.string.dialog_confirm_button),
+                                        onClick = {
+                                            navController.navigate(Screen.CartScreen.route)
+                                        },
+                                        modifier = Modifier
+                                            .width(100.dp)
+                                    )
+                                },
+                                dismissButton = {
+                                    ShopButtons.Small(
+                                        text = stringResource(R.string.dialog_dismiss_button),
+                                        onClick = {isDialogOpen = false},
+                                        modifier = Modifier
+                                            .width(100.dp)
+                                    )
+                                },
+                            )
                         }
                     }
                 }
 
             }
         IconButton(
-            onClick = { isShoppingListVisible = true },
+            onClick = { isShoppingListVisible = !isShoppingListVisible },
             modifier = Modifier.align(Alignment.TopEnd)
         ) {
             Icon(
@@ -257,39 +325,6 @@ fun BarcodeScannerScreen(
     }
 
 @Composable
-private fun showListInfo(navController: NavController) {
-    AlertDialog(
-        modifier = Modifier,
-        onDismissRequest = {
-
-        },
-        title = { Text(text = stringResource(R.string.barcode_scanner_dialog_title)) },
-        text = { Text(text = stringResource(R.string.barcode_scanner_dialog_message)) },
-        confirmButton = {
-            ShopButtons.Small(
-                text = stringResource(R.string.dialog_confirm_button),
-                onClick = {
-                    navController.navigate(Screen.CartScreen.route)
-                },
-                modifier = Modifier.width(100.dp)
-                    .height(40.dp)
-            )
-        },
-        dismissButton = {
-            ShopButtons.Small(
-                text = stringResource(R.string.dialog_dismiss_button),
-                onClick = {
-
-                },
-                modifier = Modifier.width(100.dp)
-                    .height(40.dp)
-            )
-        },
-    )
-}
-
-
-@Composable
 fun ShoppingList(
     list : List<ListProduct>
 ) {
@@ -298,7 +333,8 @@ fun ShoppingList(
             productList = it,
             modifier = Modifier
                 .padding(20.dp, vertical = 40.dp)
-                .background(Purple80)
+                .border(1.dp, PurplePrimary, RoundedCornerShape(10.dp))
+                .background(PurpleGrey80)
                 .fillMaxWidth(),
             )
     }
