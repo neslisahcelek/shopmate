@@ -32,8 +32,9 @@ class ProductListViewModel @Inject constructor(
 
     private fun setCategoryName(category: String): String {
         return when (category) {
-            "Ayakkabı" -> "shoe"
+            "Ayakkabı" -> "new balance"
             "Çanta" -> "luggage"
+            "Mont" -> "coats jackets"
             "Dekorasyon" -> "home"
             "Koltuk" -> "chair"
             else -> "shoe"
@@ -50,7 +51,6 @@ class ProductListViewModel @Inject constructor(
                         productList = productList)
                 }
                 is Resource.Error -> {
-                    println(it.message)
                     _state.value = state.value.copy(error = it.message, messageId = R.string.try_again)
                 }
                 is Resource.Loading -> {
@@ -73,8 +73,6 @@ class ProductListViewModel @Inject constructor(
                 shoppingList = _state.value.shoppingList?.plus(currentProduct),
             )
             shoppingListState.value.shoppingList = shoppingList.plus(currentProduct)
-
-            println(shoppingListState.value!!.shoppingList.size)
         }
     }
 
