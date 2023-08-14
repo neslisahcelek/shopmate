@@ -1,5 +1,7 @@
 package com.example.shoppingscanner.presentation.ui.productlist
 
+import android.annotation.SuppressLint
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -8,14 +10,18 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.List
 import androidx.compose.material3.BottomAppBar
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -25,36 +31,35 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
-import androidx.navigation.NavHostController
 import com.example.shoppingscanner.R
 import com.example.shoppingscanner.component.ShopButtons
 import com.example.shoppingscanner.component.ShopList
+import com.example.shoppingscanner.component.ShopTexts
 import com.example.shoppingscanner.domain.dto.ListProduct
-import com.example.shoppingscanner.presentation.ui.navigation.Screen
 import com.example.shoppingscanner.presentation.ui.base.BaseEvent
+import com.example.shoppingscanner.presentation.ui.navigation.NavActions
+import com.example.shoppingscanner.presentation.ui.theme.PurpleGrey80
 import com.example.shoppingscanner.presentation.ui.theme.PurplePrimary
 import com.example.shoppingscanner.util.showToast
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ModalBottomSheet
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextDecoration
-import com.example.shoppingscanner.component.ShopTexts
-import com.example.shoppingscanner.presentation.ui.navigation.NavActions
 
 
+@SuppressLint("StateFlowValueCalledInComposition")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProductListScreen(
     action: NavActions.ProductListActions,
     viewModel : ProductListViewModel
 ) {
-
-    val state by rememberUpdatedState(newValue = viewModel.state.value)
+    val state by viewModel.state.collectAsState()
     val context = LocalContext.current
 
-    val shoppingList = viewModel.shoppingListState.value.shoppingList
+    val shoppingListState by viewModel.shoppingListState.collectAsState()
+    val shoppingList = shoppingListState.shoppingList
+
     var isShoppingListVisible by remember {
         mutableStateOf(false)
     }
@@ -111,44 +116,41 @@ fun ProductListScreen(
                         }
                     )
                 }
-                BottomAppBar (
+                ConstraintLayout (
                     modifier = Modifier
-                        .height(55.dp)
+                        .fillMaxWidth()
                         .align(Alignment.BottomCenter)
+                        .padding(bottom = 10.dp)
                 ){
-                    ConstraintLayout (
+                    val (icon, button) = createRefs()
+
+                    ShopButtons.Small(
+                        text = stringResource(R.string.continue_with_barcode),
+                        onClick = {
+                            action.productListToBarcodeScannerAction.invoke()
+                        },
                         modifier = Modifier
-                            .fillMaxWidth()
-                    ){
-                        val (icon, button) = createRefs()
+                            .constrainAs(button) {
+                                bottom.linkTo(parent.bottom)
+                                centerHorizontallyTo(parent)
+                            }
+                            .width(200.dp)
+                    )
 
-                        ShopButtons.Small(
-                            text = stringResource(R.string.continue_with_barcode),
-                            onClick = {
-                                action.productListToBarcodeScannerAction.invoke()
-                            },
-                            modifier = Modifier
-                                .constrainAs(button) {
-                                    bottom.linkTo(parent.bottom)
-                                    centerHorizontallyTo(parent)
-                                }
-                                .width(200.dp)
+                    IconButton(
+                        onClick = { isShoppingListVisible = !isShoppingListVisible },
+                        modifier = Modifier
+                            .constrainAs(icon) {
+                                end.linkTo(parent.end)
+                                start.linkTo(button.end)
+                            }
+                            .background(color = PurpleGrey80, shape = CircleShape)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.List,
+                            tint = PurplePrimary,
+                            contentDescription = null
                         )
-
-                        IconButton(
-                            onClick = { isShoppingListVisible = !isShoppingListVisible },
-                            modifier = Modifier
-                                .constrainAs(icon) {
-                                    end.linkTo(parent.end)
-                                    start.linkTo(button.end)
-                                }
-                        ) {
-                            Icon(
-                                imageVector = Icons.Default.List,
-                                tint = PurplePrimary,
-                                contentDescription = null
-                            )
-                        }
                     }
                 }
                 if (isShoppingListVisible) {
@@ -159,7 +161,8 @@ fun ProductListScreen(
                     )
                     {
                         BottomSheetContent(
-                            list = shoppingList)
+                            list = shoppingList
+                        )
                     }
                 }
 
@@ -177,8 +180,9 @@ fun BottomSheetContent(
 ) {
     ShopTexts.Title1Bold(
         text = stringResource(id = R.string.my_shopping_list),
-        modifier = Modifier.fillMaxWidth()
-            .padding(bottom=5.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(bottom = 5.dp),
         textAlign = TextAlign.Center,
         color = PurplePrimary,
         textDecoration = TextDecoration.Underline
@@ -188,7 +192,7 @@ fun BottomSheetContent(
             productList = it,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(bottom=20.dp)
+                .padding(bottom = 20.dp)
         )
     }
 }
