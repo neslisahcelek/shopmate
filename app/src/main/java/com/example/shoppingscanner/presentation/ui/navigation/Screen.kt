@@ -1,4 +1,4 @@
-package com.example.shoppingscanner.presentation.ui
+package com.example.shoppingscanner.presentation.ui.navigation
 
 sealed class Screen (val route:String){
     object DontWaitScreen: Screen(route = "dont_wait_screen")
