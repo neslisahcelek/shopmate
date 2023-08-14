@@ -160,15 +160,30 @@ object ShopList {
     fun BottomSheetProductRow(
         product : ListProduct,
     ){
-        product.title?.let {
-            ShopTexts.BodyRegular(
-                text = it,
+        Row (
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 20.dp, end = 8.dp, bottom = 5.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center
+        ){
+            Image(
+                bitmap = ImageBitmap.imageResource(id = R.drawable.purpledot),
+                contentDescription = "",
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
-                fontSize = 16.sp,
-                textAlign = TextAlign.Center,
+                    .width(10.dp)
+                    .height(10.dp),
             )
+            product.title?.let {
+                ShopTexts.BodyRegular(
+                    text = it,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start=5.dp, end = 16.dp),
+                    fontSize = 16.sp,
+                    textAlign = TextAlign.Start,
+                )
+            }
         }
     }
     @Composable
