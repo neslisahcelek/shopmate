@@ -4,11 +4,11 @@ import com.example.shoppingscanner.data.remote.model.ProductResponse
 import com.example.shoppingscanner.domain.dto.CartProduct
 
 fun ProductResponse.toCartProduct(): List<CartProduct>{
-    return products!!.map { it ->
+    return products?.map {
         CartProduct(
-            it.barcode_number!!,
-            it.title, it.stores?.get(0)?.price,
-            it.images?.get(0),
-            0)
-    }
+            barcode_number = it.barcode_number,
+            title = it.title, it.stores?.first()?.price,
+            image = it.images?.first(),
+            quantity = 0)
+    } ?: emptyList()
 }
