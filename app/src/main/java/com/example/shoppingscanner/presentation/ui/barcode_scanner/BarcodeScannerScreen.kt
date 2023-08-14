@@ -25,6 +25,8 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.ModalDrawerSheet
+import androidx.compose.material3.NavigationDrawerItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -42,6 +44,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
@@ -133,7 +136,7 @@ fun BarcodeScannerScreen(
                     onClick = { viewModel.onEvent(BaseEvent.GetProduct()) },
                     modifier = Modifier
                         .align(Alignment.BottomCenter)
-                        .padding(bottom=30.dp)
+                        .padding(bottom = 30.dp)
                         .border(3.dp, PurpleGrey40, CircleShape)
 
                 ) {
@@ -310,7 +313,7 @@ fun BarcodeScannerScreen(
             }
         IconButton(
             onClick = { isShoppingListVisible = !isShoppingListVisible },
-            modifier = Modifier.align(Alignment.TopEnd)
+            modifier = Modifier.align(Alignment.TopStart)
         ) {
             Icon(
                 imageVector = Icons.Default.List,
@@ -319,24 +322,38 @@ fun BarcodeScannerScreen(
             )
         }
         if (isShoppingListVisible) {
-            shoppingList?.let { ShoppingList(list = it) }
+            shoppingList?.let { ShoppingListDrawer(shoppingList = it) }
         }
         }
     }
 
 @Composable
-fun ShoppingList(
-    list : List<ListProduct>
-) {
-    list.let {
-        ShopList.ShoppingProductList(
-            productList = it,
+fun ShoppingListDrawer(
+    shoppingList : List<ListProduct>
+){
+    ModalDrawerSheet (
+        modifier = Modifier
+            .fillMaxWidth()
+            .fillMaxHeight(0.6f)
+            .padding(horizontal = 40.dp, vertical = 15.dp)
+    ){
+        ShopTexts.Title1Bold(
+            text = stringResource(id = R.string.my_shopping_list),
             modifier = Modifier
-                .padding(20.dp, vertical = 40.dp)
-                .border(1.dp, PurplePrimary, RoundedCornerShape(10.dp))
-                .background(PurpleGrey80)
-                .fillMaxWidth(),
+                .fillMaxWidth()
+                .padding(top=15.dp),
+            textAlign = TextAlign.Center,
+            color = PurplePrimary,
+            textDecoration = TextDecoration.Underline
+        )
+        shoppingList.let {
+            ShopList.ShoppingProductList(
+                productList = it,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 20.dp)
             )
+        }
     }
 }
 
