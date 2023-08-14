@@ -19,15 +19,16 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.shoppingscanner.R
 import com.example.shoppingscanner.domain.dto.CartProduct
-import com.example.shoppingscanner.presentation.ui.Screen
+import com.example.shoppingscanner.presentation.ui.navigation.Screen
 import com.example.shoppingscanner.presentation.ui.barcode_scanner.ProductViewModel
 import com.example.shoppingscanner.component.ShopButtons
 import com.example.shoppingscanner.component.ShopList
 import com.example.shoppingscanner.component.ShopTexts
+import com.example.shoppingscanner.presentation.ui.navigation.NavActions
 
 @Composable
 fun CartScreen(
-    navController: NavController,
+    action: NavActions.CartActions,
     viewModel : ProductViewModel
 ) {
 
@@ -60,7 +61,7 @@ fun CartScreen(
 
         ShopButtons.Primary(
             onClick = {
-                navController.navigate(Screen.PaymentCompletedScreen.route)
+                action.cartToPaymentCompletedAction.invoke()
             },
             text = stringResource(R.string.pay_with_hadi),
         )

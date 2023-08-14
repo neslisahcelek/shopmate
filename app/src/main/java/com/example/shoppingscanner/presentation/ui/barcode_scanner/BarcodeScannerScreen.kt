@@ -1,6 +1,5 @@
 package com.example.shoppingscanner.presentation.ui.barcode_scanner
 
-import androidx.annotation.DrawableRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -21,12 +20,9 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.filled.ShoppingCart
-import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.ModalDrawerSheet
-import androidx.compose.material3.NavigationDrawerItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -38,7 +34,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.BitmapPainter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -48,7 +43,6 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
-import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.example.shoppingscanner.R
@@ -57,21 +51,18 @@ import com.example.shoppingscanner.component.ShopDialogs
 import com.example.shoppingscanner.component.ShopList
 import com.example.shoppingscanner.component.ShopTexts
 import com.example.shoppingscanner.domain.dto.ListProduct
-import com.example.shoppingscanner.presentation.ui.Screen
+import com.example.shoppingscanner.presentation.ui.navigation.Screen
 import com.example.shoppingscanner.presentation.ui.base.BaseEvent
-import com.example.shoppingscanner.presentation.ui.theme.Pink80
+import com.example.shoppingscanner.presentation.ui.navigation.NavActions
 import com.example.shoppingscanner.presentation.ui.theme.Purple80
 import com.example.shoppingscanner.presentation.ui.theme.PurpleGrey40
-import com.example.shoppingscanner.presentation.ui.theme.PurpleGrey80
 import com.example.shoppingscanner.presentation.ui.theme.PurplePrimary
 import com.example.shoppingscanner.util.showToast
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 
 
 @Composable
 fun BarcodeScannerScreen(
-    navController: NavController,
+    action: NavActions.BarcodeScannerActions,
     viewModel : ProductViewModel
     ) {
     val state by rememberUpdatedState(newValue = viewModel.state.value)
@@ -128,15 +119,15 @@ fun BarcodeScannerScreen(
                     contentDescription = "Product image",
                     contentScale = ContentScale.Fit,
                     modifier = Modifier
-                        .align(Alignment.Center)
+                        .align(Alignment.TopCenter)
                         .fillMaxWidth()
-                        .padding(20.dp)
+                        .padding(vertical = 50.dp, horizontal = 20.dp)
                 )
                 IconButton(
                     onClick = { viewModel.onEvent(BaseEvent.GetProduct()) },
                     modifier = Modifier
                         .align(Alignment.BottomCenter)
-                        .padding(bottom = 30.dp)
+                        .padding(bottom = 50.dp)
                         .border(3.dp, PurpleGrey40, CircleShape)
 
                 ) {
@@ -264,14 +255,12 @@ fun BarcodeScannerScreen(
                             )
                     if (isDialogOpen) {
                         if (state.cartProducts.isNullOrEmpty()){
-                            println("cart: ${state.cartProducts.size}")
                             showToast(context, stringResource(id = R.string.cart_is_empty))
                             isDialogOpen = false
                         }
                         else if (state.missingProducts.isNullOrEmpty()) {
-                            println("missingprod: ${state.cartProducts.size}")
                             isDialogOpen = false
-                            navController.navigate(Screen.CartScreen.route)
+                            action.barcodeScannerToCartAction.invoke()
                         }else{
                             println("alert")
                             ShopDialogs.ShopDialog(
@@ -291,7 +280,7 @@ fun BarcodeScannerScreen(
                                     ShopButtons.Small(
                                         text = stringResource(R.string.dialog_confirm_button),
                                         onClick = {
-                                            navController.navigate(Screen.CartScreen.route)
+                                           action.barcodeScannerToCartAction.invoke()
                                         },
                                         modifier = Modifier
                                             .width(100.dp)

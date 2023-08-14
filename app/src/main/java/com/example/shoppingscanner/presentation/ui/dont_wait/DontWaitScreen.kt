@@ -19,17 +19,17 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.shoppingscanner.R
-import com.example.shoppingscanner.presentation.ui.Screen
+import com.example.shoppingscanner.presentation.ui.navigation.Screen
 import com.example.shoppingscanner.component.ShopButtons
 import com.example.shoppingscanner.component.ShopTexts
+import com.example.shoppingscanner.presentation.ui.navigation.NavActions
 
 
 @Composable
 fun DontWaitScreen(
-    navController: NavController
+    action: NavActions.DontWaitActions
 ) {
     Column(
         Modifier
@@ -60,14 +60,9 @@ fun DontWaitScreen(
         ShopButtons.Primary(
             text = stringResource(R.string.show_products),
             onClick = {
-                navController.navigate(Screen.ProductListScreen.route) },
+                action.dontWaitToProductListAction.invoke()
+                      },
         )
 
     }
-}
-
-@Composable
-@Preview(showBackground = true)
-fun DontWaitScreenPreview() {
-    DontWaitScreen(navController = rememberNavController())
 }

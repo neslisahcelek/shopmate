@@ -4,7 +4,6 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.example.shoppingscanner.presentation.ui.Screen
 import com.example.shoppingscanner.presentation.ui.barcode_scanner.BarcodeScannerScreen
 import com.example.shoppingscanner.presentation.ui.cart.CartScreen
 import com.example.shoppingscanner.presentation.ui.continue_with_barcode.ContinueWithBarcodeScreen
@@ -17,6 +16,7 @@ import com.example.shoppingscanner.presentation.ui.productlist.ProductListViewMo
 @Composable
 fun setupNavGraph(
     navController: NavHostController,
+    navActions: NavActions,
     productViewModel: ProductViewModel,
     productListViewModel: ProductListViewModel
 ) {
@@ -27,24 +27,25 @@ fun setupNavGraph(
         composable(
             route = Screen.DontWaitScreen.route
         ) {
-            DontWaitScreen(navController)
+            DontWaitScreen(
+                action = navActions.DontWaitActions()
+            )
         }
         composable(
             route = Screen.ProductListScreen.route
         ) {
-            ProductListScreen(navController, productListViewModel)
-        }
-
-        composable(
-            route = Screen.ContinueWithBarcodeScreen.route
-        ) {
-            ContinueWithBarcodeScreen(navController)
+            ProductListScreen(
+                action = navActions.ProductListActions(),
+                viewModel = productListViewModel)
         }
 
         composable(
             route = Screen.BarcodeScannerScreen.route
         ) {
-            BarcodeScannerScreen(navController, viewModel = productViewModel)
+            BarcodeScannerScreen(
+                action = navActions.BarcodeScannerActions(),
+                viewModel = productViewModel
+            )
         }
 
         composable(
@@ -52,8 +53,8 @@ fun setupNavGraph(
 
         ) {
             CartScreen(
-                viewModel = productViewModel,
-                navController = navController
+                action = navActions.CartActions(),
+                viewModel = productViewModel
             )
         }
 
@@ -61,8 +62,8 @@ fun setupNavGraph(
             route = Screen.PaymentCompletedScreen.route,
         ) { entry ->
             PaymentCompletedScreen(
-                viewModel = productViewModel,
-                navController = navController,
+                action = navActions.PaymentCompletedActions(),
+                viewModel = productViewModel
             )
         }
 

@@ -1,7 +1,5 @@
 package com.example.shoppingscanner.presentation.ui.productlist
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -10,7 +8,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.List
 import androidx.compose.material3.BottomAppBar
@@ -35,9 +32,8 @@ import com.example.shoppingscanner.R
 import com.example.shoppingscanner.component.ShopButtons
 import com.example.shoppingscanner.component.ShopList
 import com.example.shoppingscanner.domain.dto.ListProduct
-import com.example.shoppingscanner.presentation.ui.Screen
+import com.example.shoppingscanner.presentation.ui.navigation.Screen
 import com.example.shoppingscanner.presentation.ui.base.BaseEvent
-import com.example.shoppingscanner.presentation.ui.theme.PurpleGrey80
 import com.example.shoppingscanner.presentation.ui.theme.PurplePrimary
 import com.example.shoppingscanner.util.showToast
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -45,12 +41,13 @@ import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import com.example.shoppingscanner.component.ShopTexts
+import com.example.shoppingscanner.presentation.ui.navigation.NavActions
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProductListScreen(
-    navController: NavHostController,
+    action: NavActions.ProductListActions,
     viewModel : ProductListViewModel
 ) {
 
@@ -128,7 +125,7 @@ fun ProductListScreen(
                         ShopButtons.Small(
                             text = stringResource(R.string.continue_with_barcode),
                             onClick = {
-                                navController.navigate(Screen.BarcodeScannerScreen.route)
+                                action.productListToBarcodeScannerAction.invoke()
                             },
                             modifier = Modifier
                                 .constrainAs(button) {
