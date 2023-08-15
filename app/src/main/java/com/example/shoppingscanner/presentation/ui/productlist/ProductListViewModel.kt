@@ -26,7 +26,7 @@ class ProductListViewModel @Inject constructor(
 
     var shoppingListState: State<ShoppingListState> = sharedViewModel.shoppingListState
 
-    private fun setCategoryName(category: String): String {
+    private fun setSearchName(category: String): String {
         return when (category) {
             ProductCategory.SHOE.categoryName -> ProductCategory.SHOE.searchName
             ProductCategory.LUGGAGE.categoryName -> ProductCategory.LUGGAGE.searchName
@@ -38,7 +38,7 @@ class ProductListViewModel @Inject constructor(
     }
 
     fun getProductListFromAPI(category:String) {
-        val apiCategory = setCategoryName(category)
+        val apiCategory = setSearchName(category)
         getProductListUseCase.executeGetProductList(apiCategory).onEach {
             when(it){
                 is Resource.Success -> {
