@@ -1,5 +1,6 @@
 package com.example.shoppingscanner.presentation.ui.barcode_scanner
 
+import android.os.Parcelable
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -26,6 +27,7 @@ import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -44,6 +46,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import com.example.shoppingscanner.R
 import com.example.shoppingscanner.component.ShopButtons
@@ -51,22 +54,22 @@ import com.example.shoppingscanner.component.ShopDialogs
 import com.example.shoppingscanner.component.ShopList
 import com.example.shoppingscanner.component.ShopTexts
 import com.example.shoppingscanner.domain.dto.ListProduct
-import com.example.shoppingscanner.presentation.ui.navigation.Screen
 import com.example.shoppingscanner.presentation.ui.base.BaseEvent
 import com.example.shoppingscanner.presentation.ui.navigation.NavActions
+import com.example.shoppingscanner.presentation.ui.shared.ShoppingListState
 import com.example.shoppingscanner.presentation.ui.theme.Purple80
 import com.example.shoppingscanner.presentation.ui.theme.PurpleGrey40
 import com.example.shoppingscanner.presentation.ui.theme.PurplePrimary
-import com.example.shoppingscanner.util.showToast
-
+import com.example.shoppingscanner.util.showShortToast
 
 @Composable
 fun BarcodeScannerScreen(
     action: NavActions.BarcodeScannerActions,
     viewModel : ProductViewModel
     ) {
-    val state by rememberUpdatedState(newValue = viewModel.state.value)
-    val shoppingList = viewModel.shoppingListState.value.shoppingList
+    val state by viewModel.state.collectAsState()
+
+    val shoppingListState by rememberUpdatedState(newValue = viewModel.shoppingListState.value)
 
     val context = LocalContext.current
 
@@ -75,7 +78,7 @@ fun BarcodeScannerScreen(
     }
 
     state.messageId?.let {
-        showToast(
+        showShortToast(
             context = context,
             message = stringResource(id = it)
         )
@@ -255,7 +258,7 @@ fun BarcodeScannerScreen(
                             )
                     if (isDialogOpen) {
                         if (state.cartProducts.isNullOrEmpty()){
-                            showToast(context, stringResource(id = R.string.cart_is_empty))
+                            showShortToast(context, stringResource(id = R.string.cart_is_empty))
                             isDialogOpen = false
                         }
                         else if (state.missingProducts.isNullOrEmpty()) {
@@ -267,15 +270,8 @@ fun BarcodeScannerScreen(
                                 modifier = Modifier,
                                 onDismissRequest = {
                                     isDialogOpen = false },
-                                title = {
-                                    Text(
-                                        text = stringResource(R.string.barcode_scanner_dialog_title))
-                                        },
-                                text = {
-                                    Text(
-                                        text = stringResource(R.string.barcode_scanner_dialog_message),
-                                    )
-                                       },
+                                title = { Text(text = stringResource(R.string.barcode_scanner_dialog_title)) },
+                                text = { Text(text = stringResource(R.string.barcode_scanner_dialog_message),) },
                                 confirmButton = {
                                     ShopButtons.Small(
                                         text = stringResource(R.string.dialog_confirm_button),
@@ -311,7 +307,7 @@ fun BarcodeScannerScreen(
             )
         }
         if (isShoppingListVisible) {
-            shoppingList?.let { ShoppingListDrawer(shoppingList = it) }
+            shoppingListState.shoppingList?.let { ShoppingListDrawer(shoppingList = it) }
         }
         }
     }
@@ -330,7 +326,7 @@ fun ShoppingListDrawer(
             text = stringResource(id = R.string.my_shopping_list),
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top=15.dp),
+                .padding(top = 15.dp, bottom = 5.dp),
             textAlign = TextAlign.Center,
             color = PurplePrimary,
             textDecoration = TextDecoration.Underline

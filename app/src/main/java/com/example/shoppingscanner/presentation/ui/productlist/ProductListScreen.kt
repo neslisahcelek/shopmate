@@ -44,7 +44,7 @@ import com.example.shoppingscanner.presentation.ui.base.BaseEvent
 import com.example.shoppingscanner.presentation.ui.navigation.NavActions
 import com.example.shoppingscanner.presentation.ui.theme.PurpleGrey80
 import com.example.shoppingscanner.presentation.ui.theme.PurplePrimary
-import com.example.shoppingscanner.util.showToast
+import com.example.shoppingscanner.util.showShortToast
 
 
 @SuppressLint("StateFlowValueCalledInComposition")
@@ -57,15 +57,12 @@ fun ProductListScreen(
     val state by viewModel.state.collectAsState()
     val context = LocalContext.current
 
-    val shoppingListState by viewModel.shoppingListState.collectAsState()
-    val shoppingList = shoppingListState.shoppingList
-
     var isShoppingListVisible by remember {
         mutableStateOf(false)
     }
 
     state.messageId?.let {
-        showToast(
+        showShortToast(
             context = context,
             message = stringResource(id = it)
         )
@@ -161,7 +158,7 @@ fun ProductListScreen(
                     )
                     {
                         BottomSheetContent(
-                            list = shoppingList
+                            list = viewModel.shoppingListState.value.shoppingList
                         )
                     }
                 }
