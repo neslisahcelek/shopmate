@@ -1,14 +1,14 @@
 package com.example.shoppingscanner.presentation.ui.barcode_scanner
 
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.shoppingscanner.R
 import com.example.shoppingscanner.domain.repository.BarcodeRepository
 import com.example.shoppingscanner.domain.usecase.GetProduct
 import com.example.shoppingscanner.presentation.ui.base.BaseEvent
-import com.example.shoppingscanner.presentation.ui.productlist.ProductListState
+import com.example.shoppingscanner.presentation.ui.base.BaseViewModel
 import com.example.shoppingscanner.presentation.ui.shared.SharedViewModel
 import com.example.shoppingscanner.presentation.ui.shared.ShoppingListState
 import com.example.shoppingscanner.util.Resource
@@ -24,18 +24,11 @@ class ProductViewModel @Inject constructor(
     private val getProductUseCase:GetProduct,
     private val barcodeRepo:BarcodeRepository,
     private val sharedViewModel: SharedViewModel,
-    ) : ViewModel() {
-
-    private val _state = mutableStateOf(BarcodeScannerState())
-    val state : State<BarcodeScannerState> = _state
-
-    private val _productListState = mutableStateOf(ProductListState())
-    val productListState : State<ProductListState> = _productListState
+    ) : BaseViewModel<BarcodeScannerState>(BarcodeScannerState()) {
 
     var shoppingListState: State<ShoppingListState> = sharedViewModel.shoppingListState
 
-
-    fun onEvent(event:BaseEvent){
+    override fun onEvent(event:BaseEvent){
         when (event){
             is BaseEvent.GetData -> {
 
@@ -44,7 +37,9 @@ class ProductViewModel @Inject constructor(
                 getBarcode()
             }
             is BaseEvent.OnHandledMessage -> {
-                _state.value.copy(messageId = null)
+                setState {
+                    copy(messageId = null)
+                }
             }
         }
     }
@@ -55,9 +50,9 @@ class ProductViewModel @Inject constructor(
                 if(!it.isNullOrBlank()){
                     getProductFromAPI(it)
                 }else{
-                    _state.value.copy(
-                        messageId = R.string.barcode_not_found
-                    )
+                    setState {
+                        copy(messageId = R.string.barcode_not_found)
+                    }
                 }
             }
         }
@@ -66,37 +61,49 @@ class ProductViewModel @Inject constructor(
         getProductUseCase.executeGetProduct(barcode = barcode).onEach {
             when(it){
                 is Resource.Success -> {
-                    val product = it.data?.get(0)
-                    _state.value = _state.value.copy(product = product)
+                    val product = it.data?.first()
+                    setState {
+                        copy(product = product)
+                    }
                 }
-
                 is Resource.Error -> {
-                    _state.value = state.value.copy(error = it.message, messageId = R.string.try_again)
+                    setState {
+                        copy(
+                            error = it.message,
+                            messageId = R.string.try_again
+                        )
+                    }
                 }
                 is Resource.Loading -> {
-                    _state.value = state.value.copy(isLoading = true)
-                }
+                    setState {
+                        copy(isLoading = true)
+                    }                }
             }
         }.launchIn(viewModelScope)
     }
 
     fun addToCart() {
         val currentProduct = state.value.product
-        val existingProduct = _state.value.cartProducts.find {
-            it.barcode_number == currentProduct!!.barcode_number }
+        val existingProduct = state.value.cartProducts.find {
+            it?.barcode_number == currentProduct?.barcode_number
+        }
 
         if (existingProduct != null) {
             existingProduct.quantity++
         } else {
-            currentProduct!!.quantity = 1
-            _state.value = _state.value.copy(
-                cartProducts = _state.value.cartProducts + currentProduct
-            )
+            currentProduct?.quantity = 1
+            setState {
+                copy(
+                    cartProducts = state.value.cartProducts.plus(currentProduct)
+                )
+            }
             checkShoppingList()
         }
-
-        _state.value = _state.value.copy(totalPrice = calculateTotalPrice())
-
+        setState {
+            copy(
+                totalPrice = calculateTotalPrice()
+            )
+        }
     }
 
     fun checkShoppingList(){
@@ -105,27 +112,25 @@ class ProductViewModel @Inject constructor(
         shopList?.let { shoppingList ->
             for (productInList in shoppingList) {
                 val productFoundInCart = cartProducts.find {
-                    it.barcode_number == productInList.barcode_number
+                    it?.barcode_number == productInList.barcode_number
                 }
 
                 if (productFoundInCart == null) {
                     productInList.isInCart = false
-                    _state.value = state.value.copy(
-                        missingProducts=state.value.missingProducts + productInList
-                    )
+                    setState {
+                        copy(
+                            missingProducts=state.value.missingProducts.plus(productInList)
+                        )
+                    }
                 }else{
                     productInList.isInCart = true
                 }
             }
         }
-        println("missing products: ${state.value.missingProducts.onEach { 
-            it.title
-        }} size: ${state.value.missingProducts.size}" )
     }
 
-    private fun calculateTotalPrice(): Double {
-        return _state.value.cartProducts.sumOf { it.price!!.toDouble() * it.quantity }
-    }
+    private fun calculateTotalPrice(): Double =
+        state.value.cartProducts.sumOf { it?.price!!.toDouble() * it.quantity }
 
 }
 

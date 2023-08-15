@@ -1,15 +1,17 @@
 package com.example.shoppingscanner.presentation.ui.productlist
 
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.shoppingscanner.R
 import com.example.shoppingscanner.domain.dto.ListProduct
 import com.example.shoppingscanner.domain.usecase.GetProductList
 import com.example.shoppingscanner.presentation.ui.base.BaseEvent
+import com.example.shoppingscanner.presentation.ui.base.BaseViewModel
 import com.example.shoppingscanner.presentation.ui.shared.SharedViewModel
 import com.example.shoppingscanner.presentation.ui.shared.ShoppingListState
+import com.example.shoppingscanner.util.ProductCategory
 import com.example.shoppingscanner.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
@@ -20,24 +22,18 @@ import javax.inject.Inject
 class ProductListViewModel @Inject constructor(
     private val getProductListUseCase: GetProductList,
     private val sharedViewModel: SharedViewModel,
-    ) : ViewModel() {
-
-    private val _state = mutableStateOf(ProductListState())
-    val state : State<ProductListState> = _state
-
-    var productList: List<ListProduct>? = listOf()
+    ) : BaseViewModel<ProductListState>(ProductListState()) {
 
     var shoppingListState: State<ShoppingListState> = sharedViewModel.shoppingListState
 
-
     private fun setCategoryName(category: String): String {
         return when (category) {
-            "Ayakkabı" -> "new balance"
-            "Çanta" -> "luggage"
-            "Mont" -> "coats jackets"
-            "Dekorasyon" -> "home"
-            "Koltuk" -> "chair"
-            else -> "shoe"
+            ProductCategory.SHOE.categoryName -> ProductCategory.SHOE.searchName
+            ProductCategory.LUGGAGE.categoryName -> ProductCategory.LUGGAGE.searchName
+            ProductCategory.JACKET.categoryName -> ProductCategory.JACKET.searchName
+            ProductCategory.DECORATION.categoryName -> ProductCategory.DECORATION.searchName
+            ProductCategory.CHAIR.categoryName -> ProductCategory.CHAIR.searchName
+            else ->   ProductCategory.SHOE.categoryName
         }
     }
 
@@ -46,15 +42,22 @@ class ProductListViewModel @Inject constructor(
         getProductListUseCase.executeGetProductList(apiCategory).onEach {
             when(it){
                 is Resource.Success -> {
-                    productList = it.data
-                    _state.value = _state.value.copy(
-                        productList = productList)
+                    setState {
+                        copy(productList = it.data)
+                    }
                 }
                 is Resource.Error -> {
-                    _state.value = state.value.copy(error = it.message, messageId = R.string.try_again)
+                    setState {
+                        copy(
+                            error = it.message,
+                            messageId = R.string.try_again
+                        )
+                    }
                 }
                 is Resource.Loading -> {
-                    _state.value = state.value.copy(isLoading = true)
+                    setState {
+                        copy(isLoading = true)
+                    }
                 }
             }
         }.launchIn(viewModelScope)
@@ -67,25 +70,27 @@ class ProductListViewModel @Inject constructor(
             it.barcode_number == currentProduct?.barcode_number
         }
         if (existingProduct != null) {
-            _state.value.copy(messageId = R.string.product_exist)
+            setState {
+                copy(messageId = R.string.product_exist)
+            }
         } else {
-            _state.value = _state.value.copy(
-                shoppingList = _state.value.shoppingList?.plus(currentProduct),
-            )
+            setState {
+                copy(messageId = R.string.product_added)
+            }
             shoppingListState.value.shoppingList = shoppingList.plus(currentProduct)
         }
     }
 
-    fun onEvent(event: BaseEvent){
+    override fun onEvent(event: BaseEvent){
         when (event){
             is BaseEvent.GetData -> {
                 getProductListFromAPI(event.category)
             }
             is BaseEvent.OnHandledMessage -> {
-                _state.value.copy(messageId = null)
-            }else -> {
-
-            }
+                setState {
+                    copy(messageId = null)
+                }
+            }else -> {}
         }
     }
 
