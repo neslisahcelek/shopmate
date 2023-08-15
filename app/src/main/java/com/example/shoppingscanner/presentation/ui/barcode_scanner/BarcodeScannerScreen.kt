@@ -37,6 +37,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.layout.FixedScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -120,7 +121,8 @@ fun BarcodeScannerScreen(
                 AsyncImage(
                     model = state.product?.image,
                     contentDescription = "Product image",
-                    contentScale = ContentScale.Fit,
+                    placeholder = painterResource(id = R.drawable.baseline_image_24),
+                    contentScale = FixedScale(0.9f),
                     modifier = Modifier
                         .align(Alignment.TopCenter)
                         .fillMaxWidth()

@@ -34,6 +34,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.imageResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -46,6 +47,7 @@ import com.example.shoppingscanner.domain.dto.CartProduct
 import com.example.shoppingscanner.domain.dto.ListProduct
 import com.example.shoppingscanner.presentation.ui.productlist.ProductListViewModel
 import com.example.shoppingscanner.presentation.ui.theme.Purple80
+import com.example.shoppingscanner.util.ProductCategory
 
 
 object ShopList {
@@ -96,6 +98,7 @@ object ShopList {
                     AsyncImage(
                         model = product.image,
                         contentDescription = "Product image",
+                        placeholder = painterResource(id = R.drawable.baseline_image_24),
                         contentScale = ContentScale.Fit,
                         modifier = Modifier
                             .padding(top = 20.dp, bottom = 3.dp)
@@ -173,7 +176,7 @@ object ShopList {
                     text = it,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(start=5.dp, end = 16.dp),
+                        .padding(start = 5.dp, end = 16.dp),
                     fontSize = 16.sp,
                     textAlign = TextAlign.Start,
                 )
@@ -233,12 +236,12 @@ object ShopList {
             contentPadding = PaddingValues(),
             modifier = modifier
         ){
-            val categoryList = mutableListOf<String>(
-                "Ayakkabı",
-                "Çanta",
-                "Mont",
-                "Koltuk",
-                "Dekorasyon",
+            val categoryList = mutableListOf(
+                ProductCategory.DECORATION.categoryName,
+                ProductCategory.CHAIR.categoryName,
+                ProductCategory.JACKET.categoryName,
+                ProductCategory.LUGGAGE.categoryName,
+                ProductCategory.SHOE.categoryName,
             )
             items(categoryList){ category ->
                 CategoryItem(
