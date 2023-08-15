@@ -6,7 +6,7 @@ import com.example.shoppingscanner.domain.dto.ListProduct
 fun ProductResponse.toListProduct(): List<ListProduct>{
     return products?.map {
         ListProduct(
-            barcode_number = it.barcode_number,
+            barcodeNumber = it.barcode_number,
             title = it.title,
             price = it.stores?.first()?.price,
             image = it.images?.first(),

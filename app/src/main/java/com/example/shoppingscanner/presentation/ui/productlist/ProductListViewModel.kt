@@ -67,7 +67,7 @@ class ProductListViewModel @Inject constructor(
         var shoppingList = shoppingListState.value.shoppingList
 
         val existingProduct = shoppingList.find {
-            it.barcode_number == currentProduct?.barcode_number
+            it.barcodeNumber == currentProduct?.barcodeNumber
         }
         if (existingProduct != null) {
             setState {

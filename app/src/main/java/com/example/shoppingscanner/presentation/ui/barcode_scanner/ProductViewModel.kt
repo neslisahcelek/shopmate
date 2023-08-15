@@ -85,7 +85,7 @@ class ProductViewModel @Inject constructor(
     fun addToCart() {
         val currentProduct = state.value.product
         val existingProduct = state.value.cartProducts.find {
-            it?.barcode_number == currentProduct?.barcode_number
+            it?.barcodeNumber == currentProduct?.barcodeNumber
         }
 
         if (existingProduct != null) {
@@ -112,7 +112,7 @@ class ProductViewModel @Inject constructor(
         shopList?.let { shoppingList ->
             for (productInList in shoppingList) {
                 val productFoundInCart = cartProducts.find {
-                    it?.barcode_number == productInList.barcode_number
+                    it?.barcodeNumber == productInList.barcodeNumber
                 }
 
                 if (productFoundInCart == null) {

@@ -1,7 +1,7 @@
 package com.example.shoppingscanner.domain.dto
 
 data class ListProduct(
-    val barcode_number: String?,
+    val barcodeNumber: String?,
     val title: String?,
     val price: String?,
     val image:String?,
