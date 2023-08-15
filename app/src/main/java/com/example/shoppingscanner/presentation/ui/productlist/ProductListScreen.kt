@@ -44,6 +44,7 @@ import com.example.shoppingscanner.presentation.ui.base.BaseEvent
 import com.example.shoppingscanner.presentation.ui.navigation.NavActions
 import com.example.shoppingscanner.presentation.ui.theme.PurpleGrey80
 import com.example.shoppingscanner.presentation.ui.theme.PurplePrimary
+import com.example.shoppingscanner.util.ProductCategory
 import com.example.shoppingscanner.util.showShortToast
 
 
@@ -74,7 +75,7 @@ fun ProductListScreen(
         )
     }
     LaunchedEffect(key1 = viewModel){
-        viewModel.getProductListFromAPI(category = "Dekorasyon")
+        viewModel.onEvent(BaseEvent.GetData(category = ProductCategory.DECORATION.categoryName))
     }
 
     Surface(
