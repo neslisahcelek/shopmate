@@ -2,7 +2,6 @@ package com.example.shoppingscanner.component
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -21,15 +20,12 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Card
-import androidx.compose.material3.CardColors
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -46,12 +42,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.example.shoppingscanner.R
-import com.example.shoppingscanner.component.ShopList.ShoppingProductList
 import com.example.shoppingscanner.domain.dto.CartProduct
 import com.example.shoppingscanner.domain.dto.ListProduct
 import com.example.shoppingscanner.presentation.ui.productlist.ProductListViewModel
 import com.example.shoppingscanner.presentation.ui.theme.Purple80
-import com.example.shoppingscanner.presentation.ui.theme.PurplePrimary
 
 
 object ShopList {
@@ -192,7 +186,6 @@ object ShopList {
         modifier: Modifier
     ) {
         LazyColumn(
-            contentPadding = PaddingValues(5.dp),
             modifier = modifier
         ){
             items(productList){ product ->
@@ -209,7 +202,6 @@ object ShopList {
         Row (
             modifier = Modifier
                 .fillMaxWidth()
-                .height(80.dp)
                 .padding(start = 8.dp, end = 8.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceAround
@@ -280,7 +272,7 @@ object ShopList {
 
     @Composable
     fun CartProductList(
-        productList : List<CartProduct>,
+        productList: List<CartProduct?>,
         modifier: Modifier
     ) {
         LazyColumn(
@@ -288,8 +280,9 @@ object ShopList {
             modifier = modifier
         ){
             items(productList){ product ->
-                CartProductRow(product = product)
-
+                product?.let {
+                    CartProductRow(product = product)
+                }
             }
         }
     }
