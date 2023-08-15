@@ -19,9 +19,14 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Checkbox
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -140,7 +145,8 @@ object ShopList {
     @Composable
     fun BottomSheetProductList(
         productList : List<ListProduct>,
-        modifier: Modifier
+        modifier: Modifier,
+        viewModel: ProductListViewModel
     ) {
         LazyColumn(
             contentPadding = PaddingValues(5.dp),
@@ -148,7 +154,9 @@ object ShopList {
         ){
             items(productList){ product ->
                 BottomSheetProductRow(
-                    product = product)
+                    product = product,
+                    viewModel = viewModel
+                )
             }
         }
     }
@@ -156,6 +164,7 @@ object ShopList {
     @Composable
     fun BottomSheetProductRow(
         product : ListProduct,
+        viewModel: ProductListViewModel
     ){
         Row (
             modifier = Modifier
@@ -175,11 +184,23 @@ object ShopList {
                 ShopTexts.BodyRegular(
                     text = it,
                     modifier = Modifier
-                        .fillMaxWidth()
+                        .fillMaxWidth(0.9f)
                         .padding(start = 5.dp, end = 16.dp),
                     fontSize = 16.sp,
                     textAlign = TextAlign.Start,
                 )
+            }
+            IconButton(
+                onClick = {
+                    viewModel.removeFromList(product)
+                },
+                modifier = Modifier
+                    .height(20.dp)
+                    .width(20.dp)
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Delete,
+                    contentDescription = "Delete button")
             }
         }
     }

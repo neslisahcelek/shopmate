@@ -1,8 +1,6 @@
 package com.example.shoppingscanner.presentation.ui.productlist
 
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.viewModelScope
 import com.example.shoppingscanner.R
 import com.example.shoppingscanner.domain.dto.ListProduct
@@ -14,8 +12,11 @@ import com.example.shoppingscanner.presentation.ui.shared.ShoppingListState
 import com.example.shoppingscanner.util.ProductCategory
 import com.example.shoppingscanner.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -25,6 +26,9 @@ class ProductListViewModel @Inject constructor(
     ) : BaseViewModel<ProductListState>(ProductListState()) {
 
     var shoppingListState: State<ShoppingListState> = sharedViewModel.shoppingListState
+
+    private val _productListEvent = MutableStateFlow<ProductListEvent?>(null)
+    val productListEvent: StateFlow<ProductListEvent?> = _productListEvent
 
     private fun setSearchName(category: String): String {
         return when (category) {
@@ -80,6 +84,23 @@ class ProductListViewModel @Inject constructor(
             shoppingListState.value.shoppingList = shoppingList.plus(currentProduct)
         }
     }
+
+    fun removeFromList(product: ListProduct) {
+        val updatedShoppingList = shoppingListState.value.shoppingList.filterNot {
+            it.barcodeNumber == product.barcodeNumber
+        }
+        shoppingListState.value.shoppingList = updatedShoppingList
+        onTriggerEvent(ProductListEvent.RemoveProduct)
+    }
+    fun onTriggerEvent(event: ProductListEvent) {
+        viewModelScope.launch {
+            _productListEvent.emit(event)
+        }
+    }
+    fun onHandledProductListEvent() {
+        _productListEvent.value = null
+    }
+
 
     override fun onEvent(event: BaseEvent){
         when (event){

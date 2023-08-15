@@ -78,6 +78,17 @@ fun ProductListScreen(
         viewModel.onEvent(BaseEvent.GetData(category = ProductCategory.DECORATION.categoryName))
     }
 
+    val list by rememberUpdatedState(newValue = viewModel.shoppingListState.value.shoppingList)
+
+    val productListEvent by viewModel.productListEvent.collectAsState(null)
+    when (productListEvent) {
+        is ProductListEvent.RemoveProduct -> {
+            viewModel.onHandledProductListEvent()
+        }
+
+        else -> {}
+    }
+
     Surface(
         modifier = Modifier.fillMaxSize(),
     ){
@@ -159,7 +170,8 @@ fun ProductListScreen(
                     )
                     {
                         BottomSheetContent(
-                            list = viewModel.shoppingListState.value.shoppingList
+                            list = list,
+                            viewModel = viewModel
                         )
                     }
                 }
@@ -174,7 +186,8 @@ fun ProductListScreen(
 
 @Composable
 fun BottomSheetContent(
-    list : List<ListProduct>
+    list : List<ListProduct>,
+    viewModel: ProductListViewModel
 ) {
     ShopTexts.Title1Bold(
         text = stringResource(id = R.string.my_shopping_list),
@@ -190,7 +203,8 @@ fun BottomSheetContent(
             productList = it,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(bottom = 20.dp)
+                .padding(bottom = 20.dp),
+            viewModel = viewModel
         )
     }
 }
