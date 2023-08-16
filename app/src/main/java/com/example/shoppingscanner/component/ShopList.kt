@@ -50,6 +50,7 @@ import coil.compose.AsyncImage
 import com.example.shoppingscanner.R
 import com.example.shoppingscanner.domain.dto.CartProduct
 import com.example.shoppingscanner.domain.dto.ListProduct
+import com.example.shoppingscanner.presentation.ui.barcode_scanner.ProductViewModel
 import com.example.shoppingscanner.presentation.ui.productlist.ProductListViewModel
 import com.example.shoppingscanner.presentation.ui.theme.Purple80
 import com.example.shoppingscanner.util.ProductCategory
@@ -207,14 +208,17 @@ object ShopList {
     @Composable
     fun ShoppingProductList(
         productList : List<ListProduct>,
-        modifier: Modifier
+        modifier: Modifier,
+        viewModel : ProductViewModel
     ) {
         LazyColumn(
             modifier = modifier
         ){
             items(productList){ product ->
                 ShoppingProductRow(
-                    product = product)
+                    product = product,
+                    viewModel = viewModel
+                )
             }
         }
     }
@@ -222,6 +226,7 @@ object ShopList {
     @Composable
     fun ShoppingProductRow(
         product : ListProduct,
+        viewModel : ProductViewModel
     ){
         Row (
             modifier = Modifier
@@ -245,6 +250,18 @@ object ShopList {
                     product.isInCart = newCheckedValue
                 }
             )
+            IconButton(
+                onClick = {
+                    viewModel.removeFromList(product)
+                },
+                modifier = Modifier
+                    .height(20.dp)
+                    .width(20.dp)
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Delete,
+                    contentDescription = "Delete button")
+            }
         }
     }
     @Composable
@@ -259,10 +276,8 @@ object ShopList {
         ){
             val categoryList = mutableListOf(
                 ProductCategory.DECORATION.categoryName,
-                ProductCategory.CHAIR.categoryName,
                 ProductCategory.JACKET.categoryName,
                 ProductCategory.LUGGAGE.categoryName,
-                ProductCategory.SHOE.categoryName,
             )
             items(categoryList){ category ->
                 CategoryItem(

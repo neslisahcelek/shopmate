@@ -5,6 +5,7 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.viewModelScope
 import com.example.shoppingscanner.R
+import com.example.shoppingscanner.domain.dto.ListProduct
 import com.example.shoppingscanner.domain.repository.BarcodeRepository
 import com.example.shoppingscanner.domain.usecase.GetProduct
 import com.example.shoppingscanner.presentation.ui.base.BaseEvent
@@ -13,6 +14,8 @@ import com.example.shoppingscanner.presentation.ui.shared.SharedViewModel
 import com.example.shoppingscanner.presentation.ui.shared.ShoppingListState
 import com.example.shoppingscanner.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -28,11 +31,14 @@ class ProductViewModel @Inject constructor(
 
     var shoppingListState: State<ShoppingListState> = sharedViewModel.shoppingListState
 
+    private val _baseEvent = MutableStateFlow<BaseEvent?>(null)
+    val baseEvent: StateFlow<BaseEvent?> = _baseEvent
+
+    fun onHandledEvent() {
+        _baseEvent.value = null
+    }
     override fun onEvent(event:BaseEvent){
         when (event){
-            is BaseEvent.GetData -> {
-
-            }
             is BaseEvent.GetProduct -> {
                 getBarcode()
             }
@@ -41,6 +47,12 @@ class ProductViewModel @Inject constructor(
                     copy(messageId = null)
                 }
             }
+            is BaseEvent.RemoveProduct -> {
+                viewModelScope.launch {
+                    _baseEvent.emit(event)
+                }
+            }
+            else -> {}
         }
     }
 
@@ -97,8 +109,8 @@ class ProductViewModel @Inject constructor(
                     cartProducts = state.value.cartProducts.plus(currentProduct)
                 )
             }
-            checkShoppingList()
         }
+        checkShoppingList()
         setState {
             copy(
                 totalPrice = calculateTotalPrice()
@@ -131,6 +143,14 @@ class ProductViewModel @Inject constructor(
 
     private fun calculateTotalPrice(): Double =
         state.value.cartProducts.sumOf { it?.price!!.toDouble() * it.quantity }
+
+    fun removeFromList(product: ListProduct) {
+        val updatedShoppingList = shoppingListState.value.shoppingList.filterNot {
+            it.barcodeNumber == product.barcodeNumber
+        }
+        shoppingListState.value.shoppingList = updatedShoppingList
+        onEvent(BaseEvent.RemoveProduct)
+    }
 
 }
 

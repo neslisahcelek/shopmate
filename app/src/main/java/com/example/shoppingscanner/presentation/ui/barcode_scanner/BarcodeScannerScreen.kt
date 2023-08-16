@@ -91,6 +91,15 @@ fun BarcodeScannerScreen(
         )
     }
 
+    val baseEvent by viewModel.baseEvent.collectAsState(null)
+    when (baseEvent) {
+        is BaseEvent.RemoveProduct -> {
+            viewModel.onHandledEvent()
+        }
+
+        else -> {}
+    }
+
     var isShoppingListVisible by remember {
         mutableStateOf(false)
     }
@@ -309,14 +318,20 @@ fun BarcodeScannerScreen(
             )
         }
         if (isShoppingListVisible) {
-            shoppingListState.shoppingList?.let { ShoppingListDrawer(shoppingList = it) }
+            shoppingListState.shoppingList?.let {
+                ShoppingListDrawer(
+                    shoppingList = it,
+                    viewModel = viewModel
+                    )
+            }
         }
         }
     }
 
 @Composable
 fun ShoppingListDrawer(
-    shoppingList : List<ListProduct>
+    shoppingList : List<ListProduct>,
+    viewModel : ProductViewModel
 ){
     ModalDrawerSheet (
         modifier = Modifier
@@ -338,7 +353,8 @@ fun ShoppingListDrawer(
                 productList = it,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(bottom = 20.dp)
+                    .padding(bottom = 20.dp),
+                viewModel = viewModel
             )
         }
     }
