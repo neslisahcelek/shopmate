@@ -10,17 +10,17 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.List
-import androidx.compose.material3.BottomAppBar
+import androidx.compose.material3.Badge
+import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -29,11 +29,14 @@ import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.example.shoppingscanner.R
 import com.example.shoppingscanner.component.ShopButtons
@@ -44,7 +47,6 @@ import com.example.shoppingscanner.presentation.ui.base.BaseEvent
 import com.example.shoppingscanner.presentation.ui.navigation.NavActions
 import com.example.shoppingscanner.presentation.ui.theme.PurpleGrey80
 import com.example.shoppingscanner.presentation.ui.theme.PurplePrimary
-import com.example.shoppingscanner.util.ProductCategory
 import com.example.shoppingscanner.util.showShortToast
 
 
@@ -74,7 +76,6 @@ fun ProductListScreen(
             )
         )
     }
-
 
     val list by rememberUpdatedState(newValue = viewModel.shoppingListState.value.shoppingList)
 
@@ -144,21 +145,16 @@ fun ProductListScreen(
                             .width(200.dp)
                     )
 
-                    IconButton(
+                    ListBadgedBox(
+                        quantity = "${list.size}",
                         onClick = { isShoppingListVisible = !isShoppingListVisible },
                         modifier = Modifier
                             .constrainAs(icon) {
                                 end.linkTo(parent.end)
-                                start.linkTo(button.end)
+                                bottom.linkTo(parent.bottom)
+                                centerVerticallyTo(button)
                             }
-                            .background(color = PurpleGrey80, shape = CircleShape)
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.List,
-                            tint = PurplePrimary,
-                            contentDescription = null
-                        )
-                    }
+                    )
                 }
                 if (isShoppingListVisible) {
                     ModalBottomSheet(
@@ -173,12 +169,8 @@ fun ProductListScreen(
                         )
                     }
                 }
-
             }
-
         }
-
-
     }
 }
 
@@ -206,5 +198,61 @@ fun BottomSheetContent(
         )
     }
 }
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun ListBadgedBox(
+    quantity: String?,
+    modifier: Modifier,
+    onClick: () -> Unit
+){
+    Box(
+        modifier = modifier
+            .width(60.dp)
+            .height(50.dp)
+            .background(
+            color = PurpleGrey80,
+            shape = RoundedCornerShape(
+                topStart = 10.dp,
+                bottomStart = 10.dp
+                )
+            )
+            .padding(top = 10.dp, end = 3.dp),
+        contentAlignment = Alignment.Center
+    ){
+        BadgedBox(
+            modifier = Modifier,
+            badge = {
+                Badge(
+                    contentColor = PurplePrimary,
+                    containerColor = Color.Transparent,
+                ){
+                    ShopTexts.BodyBold(
+                        text = quantity ?: "",
+                        fontSize = 14.sp
+                    )
+                }
+            }
+        ) {
+            IconButton(
+                onClick = onClick,
+                modifier = Modifier
+                    .height(25.dp)
+                    .width(25.dp)
+            ) {
+                Icon(
+                    modifier = Modifier.fillMaxSize(),
+                    imageVector = Icons.Default.List,
+                    tint = PurplePrimary,
+                    contentDescription = null
+                )
+            }
+        }
+    }
+
+}
+
+
+
 
 
