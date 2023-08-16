@@ -21,6 +21,9 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.filled.ShoppingCart
+import androidx.compose.material3.Badge
+import androidx.compose.material3.BadgedBox
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.ModalDrawerSheet
@@ -177,22 +180,10 @@ fun BarcodeScannerScreen(
                     Box(
                         modifier = Modifier.size(50.dp),
                     ) {
-                        Icon(
-                            imageVector = Icons.Default.ShoppingCart,
-                            contentDescription = null,
+                        CartBadgedBox(
+                            quantity = "${state.product?.quantity}",
                             modifier = Modifier
-                                .fillMaxSize()
-                                .align(Alignment.TopCenter),
-                            tint = PurplePrimary
-                        )
-                        ShopTexts.BodyBold(
-                            text = "${state.product?.quantity}",
-                            fontSize = 14.sp,
-                            modifier = Modifier
-                                .align(Alignment.TopCenter)
-                                .padding(top = 8.dp)
-                                ,
-                            color = Color.White
+                                .align(Alignment.Center)
                         )
                     }
 
@@ -357,6 +348,30 @@ fun ShoppingListDrawer(
                 viewModel = viewModel
             )
         }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun CartBadgedBox(quantity: String?, modifier: Modifier){
+    BadgedBox(
+        modifier = modifier,
+        badge = {
+            Badge(
+                contentColor = PurplePrimary,
+                containerColor = Color.White
+            ){ ShopTexts.BodyBold(
+                text = quantity ?: "0",
+                fontSize = 16.sp
+            )
+            }
+        }
+    ) {
+        Icon(
+            Icons.Default.ShoppingCart,
+            contentDescription = "Shopping Cart",
+            tint = PurplePrimary
+        )
     }
 }
 
