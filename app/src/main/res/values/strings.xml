@@ -9,8 +9,8 @@
     <string name="products">Ürünler</string>
 
     <string name="continue_info">Burada alışveriş listenizi oluşturabilir,
-        market alışverişinizi kolayca yönetebilirsiniz! Alışveriş listenize istediğiniz ürünleri ekleyin.
-         Markette ürünleri okutarak sepetinizi doldurun ve eksikleri hızlıca görün.
+        market alışverişinizi kolayca yönetebilirsiniz! \n Alışveriş listenize istediğiniz ürünleri ekleyin.
+         \n Markette ürün barkodlarını okutarak sepetinizi doldurun ve eksikleri hızlıca görün.
     </string>
     <string name="continue_with_barcode">Barkod İle Devam Et</string>
 
