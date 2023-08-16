@@ -27,8 +27,8 @@ class ProductListViewModel @Inject constructor(
 
     var shoppingListState: State<ShoppingListState> = sharedViewModel.shoppingListState
 
-    private val _productListEvent = MutableStateFlow<ProductListEvent?>(null)
-    val productListEvent: StateFlow<ProductListEvent?> = _productListEvent
+    private val _baseEvent = MutableStateFlow<BaseEvent?>(null)
+    val baseEvent: StateFlow<BaseEvent?> = _baseEvent
 
     private fun setSearchName(category: String): String {
         return when (category) {
@@ -54,7 +54,6 @@ class ProductListViewModel @Inject constructor(
                     setState {
                         copy(
                             error = it.message,
-                            messageId = R.string.try_again
                         )
                     }
                 }
@@ -90,17 +89,12 @@ class ProductListViewModel @Inject constructor(
             it.barcodeNumber == product.barcodeNumber
         }
         shoppingListState.value.shoppingList = updatedShoppingList
-        onTriggerEvent(ProductListEvent.RemoveProduct)
-    }
-    fun onTriggerEvent(event: ProductListEvent) {
-        viewModelScope.launch {
-            _productListEvent.emit(event)
-        }
-    }
-    fun onHandledProductListEvent() {
-        _productListEvent.value = null
+        onEvent(BaseEvent.RemoveProduct)
     }
 
+    fun onHandledEvent() {
+        _baseEvent.value = null
+    }
 
     override fun onEvent(event: BaseEvent){
         when (event){
@@ -111,7 +105,13 @@ class ProductListViewModel @Inject constructor(
                 setState {
                     copy(messageId = null)
                 }
-            }else -> {}
+            }
+            is BaseEvent.RemoveProduct -> {
+                viewModelScope.launch {
+                    _baseEvent.emit(event)
+                }
+            }
+            else -> {}
         }
     }
 

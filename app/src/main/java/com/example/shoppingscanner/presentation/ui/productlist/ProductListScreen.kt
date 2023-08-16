@@ -74,16 +74,14 @@ fun ProductListScreen(
             )
         )
     }
-    LaunchedEffect(key1 = viewModel){
-        viewModel.onEvent(BaseEvent.GetData(category = ProductCategory.DECORATION.categoryName))
-    }
+
 
     val list by rememberUpdatedState(newValue = viewModel.shoppingListState.value.shoppingList)
 
-    val productListEvent by viewModel.productListEvent.collectAsState(null)
-    when (productListEvent) {
-        is ProductListEvent.RemoveProduct -> {
-            viewModel.onHandledProductListEvent()
+    val baseEvent by viewModel.baseEvent.collectAsState(null)
+    when (baseEvent) {
+        is BaseEvent.RemoveProduct -> {
+            viewModel.onHandledEvent()
         }
 
         else -> {}
