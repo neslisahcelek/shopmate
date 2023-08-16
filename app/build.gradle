@@ -142,6 +142,10 @@ dependencies {
 
     // Gson
     implementation 'com.google.code.gson:gson:2.10.1'
+
+    // Balloon
+    implementation "com.github.skydoves:balloon:1.5.4"
+
 }
 kapt {
     correctErrorTypes = true
