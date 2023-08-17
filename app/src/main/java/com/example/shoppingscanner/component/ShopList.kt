@@ -189,6 +189,7 @@ object ShopList {
                         .padding(start = 5.dp, end = 16.dp),
                     fontSize = 16.sp,
                     textAlign = TextAlign.Start,
+                    maxLines = 2
                 )
             }
             IconButton(
@@ -239,8 +240,9 @@ object ShopList {
                 ShopTexts.BodyRegular(
                     text = it,
                     fontSize = 16.sp,
-                    textAlign = TextAlign.Start,
-                    modifier = Modifier.width(190.dp)
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.width(250.dp),
+                    maxLines = 2
 
                 )
             }
@@ -276,8 +278,9 @@ object ShopList {
         ){
             val categoryList = mutableListOf(
                 ProductCategory.DECORATION.categoryName,
+                ProductCategory.DRESS.categoryName,
                 ProductCategory.JACKET.categoryName,
-                ProductCategory.LUGGAGE.categoryName,
+                ProductCategory.OFFICE.categoryName
             )
             items(categoryList){ category ->
                 CategoryItem(
