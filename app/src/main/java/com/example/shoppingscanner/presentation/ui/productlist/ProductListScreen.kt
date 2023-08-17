@@ -21,6 +21,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -47,6 +48,7 @@ import com.example.shoppingscanner.presentation.ui.base.BaseEvent
 import com.example.shoppingscanner.presentation.ui.navigation.NavActions
 import com.example.shoppingscanner.presentation.ui.theme.PurpleGrey80
 import com.example.shoppingscanner.presentation.ui.theme.PurplePrimary
+import com.example.shoppingscanner.util.ProductCategory
 import com.example.shoppingscanner.util.showShortToast
 
 
@@ -75,6 +77,10 @@ fun ProductListScreen(
                 stringResource(id = it)
             )
         )
+    }
+
+    LaunchedEffect(key1 = viewModel){
+        viewModel.onEvent(BaseEvent.GetData(category = ProductCategory.DECORATION.categoryName))
     }
 
     val list by rememberUpdatedState(newValue = viewModel.shoppingListState.value.shoppingList)
@@ -211,14 +217,14 @@ fun ListBadgedBox(
             .width(60.dp)
             .height(50.dp)
             .background(
-            color = PurpleGrey80,
-            shape = RoundedCornerShape(
-                topStart = 10.dp,
-                bottomStart = 10.dp
+                color = PurpleGrey80,
+                shape = RoundedCornerShape(
+                    topStart = 10.dp,
+                    bottomStart = 10.dp
                 )
             )
             .padding(top = 10.dp, end = 3.dp),
-        contentAlignment = Alignment.Center
+        contentAlignment = Alignment.Center,
     ){
         BadgedBox(
             modifier = Modifier,
