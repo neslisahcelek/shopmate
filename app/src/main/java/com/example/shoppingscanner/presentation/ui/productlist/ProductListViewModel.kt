@@ -33,11 +33,13 @@ class ProductListViewModel @Inject constructor(
     private fun setSearchName(category: String): String {
         return when (category) {
             ProductCategory.SHOE.categoryName -> ProductCategory.SHOE.searchName
+            ProductCategory.OFFICE.categoryName -> ProductCategory.OFFICE.searchName
+            ProductCategory.DRESS.categoryName -> ProductCategory.DRESS.searchName
             ProductCategory.LUGGAGE.categoryName -> ProductCategory.LUGGAGE.searchName
             ProductCategory.JACKET.categoryName -> ProductCategory.JACKET.searchName
             ProductCategory.DECORATION.categoryName -> ProductCategory.DECORATION.searchName
             ProductCategory.CHAIR.categoryName -> ProductCategory.CHAIR.searchName
-            else ->   ProductCategory.SHOE.categoryName
+            else -> ProductCategory.LUGGAGE.categoryName
         }
     }
 
