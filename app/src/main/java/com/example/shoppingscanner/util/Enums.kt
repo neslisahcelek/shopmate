@@ -4,9 +4,13 @@ enum class ProductCategory (
     val categoryName: String,
     val searchName: String
 ){
-    DECORATION("Dekorasyon", "home"),
-    JACKET("Mont", "coats jackets"),
-    LUGGAGE("Çanta", "luggage"),
+    
+    OFFICE("Ofis", "Office Supplies > Book Accessories"),
+    DECORATION("Dekorasyon", "home decor decals"),
+    JACKET("Mont", "Clothing > Outerwear > Coats & Jackets"),
+    LUGGAGE("Çanta", "Handbags"),
     CHAIR("Koltuk", "chair"),
-    SHOE("Ayakkabı", "sneaker")
+    DRESS("Elbise", "Clothing > Dresses"),
+    SHOE("Ayakkabı", "sneakers")
+
 }
