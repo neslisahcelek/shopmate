@@ -81,6 +81,29 @@ object ShopButtons {
         }
     }
     @Composable
+    fun Dialog(
+        text: String,
+        enabled: Boolean = true,
+        onClick: () -> Unit,
+    ) {
+        Button(
+            modifier = Modifier
+                .width(90.dp),
+            enabled = enabled,
+            colors = ButtonDefaults.buttonColors(
+                containerColor = Color.White,
+                contentColor = PurplePrimary
+            ),
+            onClick = onClick,
+            shape = RoundedCornerShape(16.dp),
+            border = BorderStroke(2.dp, PurplePrimary)
+        ){
+            Text(
+                text = text,
+                fontSize = 16.sp)
+        }
+    }
+    @Composable
     fun AddList(
         enabled: Boolean = true,
         onClick: () -> Unit,
