@@ -21,7 +21,6 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Checkbox
@@ -50,8 +49,8 @@ import coil.compose.AsyncImage
 import com.example.shoppingscanner.R
 import com.example.shoppingscanner.domain.dto.CartProduct
 import com.example.shoppingscanner.domain.dto.ListProduct
-import com.example.shoppingscanner.presentation.ui.barcode_scanner.ProductViewModel
-import com.example.shoppingscanner.presentation.ui.productlist.ProductListViewModel
+import com.example.shoppingscanner.presentation.ui.barcode_scanner.ProductVM
+import com.example.shoppingscanner.presentation.ui.productlist.ProductListVM
 import com.example.shoppingscanner.presentation.ui.theme.Purple80
 import com.example.shoppingscanner.util.ProductCategory
 
@@ -147,7 +146,7 @@ object ShopList {
     fun BottomSheetProductList(
         productList : List<ListProduct>,
         modifier: Modifier,
-        viewModel: ProductListViewModel
+        viewModel: ProductListVM
     ) {
         LazyColumn(
             contentPadding = PaddingValues(5.dp),
@@ -165,7 +164,7 @@ object ShopList {
     @Composable
     fun BottomSheetProductRow(
         product : ListProduct,
-        viewModel: ProductListViewModel
+        viewModel: ProductListVM
     ){
         Row (
             modifier = Modifier
@@ -210,7 +209,7 @@ object ShopList {
     fun ShoppingProductList(
         productList : List<ListProduct>,
         modifier: Modifier,
-        viewModel : ProductViewModel
+        viewModel : ProductVM
     ) {
         LazyColumn(
             modifier = modifier
@@ -227,7 +226,7 @@ object ShopList {
     @Composable
     fun ShoppingProductRow(
         product : ListProduct,
-        viewModel : ProductViewModel
+        viewModel : ProductVM
     ){
         Row (
             modifier = Modifier
@@ -269,7 +268,7 @@ object ShopList {
     @Composable
     fun CategoryList(
         modifier: Modifier,
-        viewModel : ProductListViewModel
+        viewModel : ProductListVM
     ) {
         val selectedCategory = remember { mutableStateOf("") }
         LazyRow(
@@ -295,7 +294,7 @@ object ShopList {
     @Composable
     fun CategoryItem(
         category : String,
-        viewModel : ProductListViewModel,
+        viewModel : ProductListVM,
         selectedCategory: MutableState<String>
     ){
         val isSelected = selectedCategory.value == category

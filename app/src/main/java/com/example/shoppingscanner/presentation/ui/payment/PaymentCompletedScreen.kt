@@ -31,7 +31,7 @@ import com.example.shoppingscanner.component.ShopButtons
 import com.example.shoppingscanner.component.ShopList
 import com.example.shoppingscanner.component.ShopTexts
 import com.example.shoppingscanner.domain.dto.CartProduct
-import com.example.shoppingscanner.presentation.ui.barcode_scanner.ProductViewModel
+import com.example.shoppingscanner.presentation.ui.barcode_scanner.ProductVM
 import com.example.shoppingscanner.presentation.ui.navigation.NavActions
 import com.example.shoppingscanner.presentation.ui.theme.Green
 import com.example.shoppingscanner.presentation.ui.theme.PurpleGrey40
@@ -40,7 +40,7 @@ import com.example.shoppingscanner.presentation.ui.theme.PurpleGrey40
 @Composable
 fun PaymentCompletedScreen(
     action: NavActions.PaymentCompletedActions,
-    viewModel : ProductViewModel
+    viewModel : ProductVM
 ) {
 
     val state = viewModel.state.value

@@ -19,7 +19,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.shoppingscanner.R
 import com.example.shoppingscanner.domain.dto.CartProduct
-import com.example.shoppingscanner.presentation.ui.barcode_scanner.ProductViewModel
+import com.example.shoppingscanner.presentation.ui.barcode_scanner.ProductVM
 import com.example.shoppingscanner.component.ShopButtons
 import com.example.shoppingscanner.component.ShopList
 import com.example.shoppingscanner.component.ShopTexts
@@ -29,7 +29,7 @@ import com.example.shoppingscanner.presentation.ui.navigation.NavActions
 @Composable
 fun CartScreen(
     action: NavActions.CartActions,
-    viewModel : ProductViewModel
+    viewModel : ProductVM
 ) {
 
     val state = viewModel.state.value

@@ -20,7 +20,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class ProductListViewModel @Inject constructor(
+class ProductListVM @Inject constructor(
     private val getProductListUseCase: GetProductList,
     private val sharedViewModel: SharedViewModel,
     ) : BaseViewModel<ProductListState>(ProductListState()) {

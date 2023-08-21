@@ -6,19 +6,18 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.shoppingscanner.presentation.ui.barcode_scanner.BarcodeScannerScreen
 import com.example.shoppingscanner.presentation.ui.cart.CartScreen
-import com.example.shoppingscanner.presentation.ui.continue_with_barcode.ContinueWithBarcodeScreen
 import com.example.shoppingscanner.presentation.ui.dont_wait.DontWaitScreen
 import com.example.shoppingscanner.presentation.ui.payment.PaymentCompletedScreen
-import com.example.shoppingscanner.presentation.ui.barcode_scanner.ProductViewModel
+import com.example.shoppingscanner.presentation.ui.barcode_scanner.ProductVM
 import com.example.shoppingscanner.presentation.ui.productlist.ProductListScreen
-import com.example.shoppingscanner.presentation.ui.productlist.ProductListViewModel
+import com.example.shoppingscanner.presentation.ui.productlist.ProductListVM
 
 @Composable
 fun setupNavGraph(
     navController: NavHostController,
     navActions: NavActions,
-    productViewModel: ProductViewModel,
-    productListViewModel: ProductListViewModel
+    productViewModel: ProductVM,
+    productListViewModel: ProductListVM
 ) {
     NavHost(
         navController = navController,

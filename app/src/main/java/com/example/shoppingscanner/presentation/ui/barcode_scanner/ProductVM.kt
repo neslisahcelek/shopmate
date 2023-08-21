@@ -1,8 +1,6 @@
 package com.example.shoppingscanner.presentation.ui.barcode_scanner
 
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.viewModelScope
 import com.example.shoppingscanner.R
 import com.example.shoppingscanner.domain.dto.ListProduct
@@ -23,7 +21,7 @@ import javax.inject.Inject
 
 
 @HiltViewModel
-class ProductViewModel @Inject constructor(
+class ProductVM @Inject constructor(
     private val getProductUseCase:GetProduct,
     private val barcodeRepo:BarcodeRepository,
     private val sharedViewModel: SharedViewModel,
