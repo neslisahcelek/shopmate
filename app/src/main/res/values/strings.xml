@@ -38,9 +38,15 @@
     <string name="my_shopping_list">Alışveriş Listem</string>
 
     <string name="barcode_scanner_dialog_title">Eksik Ürünleriniz Var</string>
-    <string name="barcode_scanner_dialog_message">Alışveriş listenizdeki ürünlerden bazılarını sepetinize eklemediniz. Yine de ödeme adımına geçmek istiyor musunuz?</string>
+    <string name="barcode_scanner_dialog_message">Alışveriş listenizdeki ürünlerden bazılarını
+        sepetinize eklemediniz. Yine de ödeme adımına geçmek istiyor musunuz?</string>
     <string name="dialog_confirm_button">Evet</string>
     <string name="dialog_dismiss_button">Hayır</string>
+
     <string name="cart_is_empty">Lütfen sepetinize ürün ekleyin.</string>
     <string name="show_products">Ürünleri Gör</string>
+
+    <string name="product_list_dialog_title">Listeniz Boş</string>
+    <string name="product_list_dialog_message">Alışveriş listenize ürün eklemediniz.
+        Yine de barkod okutma adımına geçmek ister misiniz?</string>
 </resources>
