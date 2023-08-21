@@ -20,6 +20,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -41,6 +42,7 @@ import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.example.shoppingscanner.R
 import com.example.shoppingscanner.component.ShopButtons
+import com.example.shoppingscanner.component.ShopDialogs
 import com.example.shoppingscanner.component.ShopList
 import com.example.shoppingscanner.component.ShopTexts
 import com.example.shoppingscanner.domain.dto.ListProduct
@@ -84,6 +86,9 @@ fun ProductListScreen(
     }
 
     val list by rememberUpdatedState(newValue = viewModel.shoppingListState.value.shoppingList)
+    var isDialogOpen by remember {
+        mutableStateOf(false)
+    }
 
     val baseEvent by viewModel.baseEvent.collectAsState(null)
     when (baseEvent) {
@@ -141,7 +146,7 @@ fun ProductListScreen(
                     ShopButtons.Small(
                         text = stringResource(R.string.continue_with_barcode),
                         onClick = {
-                            action.productListToBarcodeScannerAction.invoke()
+                            isDialogOpen = true
                         },
                         modifier = Modifier
                             .constrainAs(button) {
@@ -173,6 +178,39 @@ fun ProductListScreen(
                             list = list,
                             viewModel = viewModel
                         )
+                    }
+                }
+
+                if (isDialogOpen) {
+                    if (list.isNullOrEmpty()){
+                        ShopDialogs.ShopDialog(
+                            modifier = Modifier,
+                            onDismissRequest = {
+                                isDialogOpen = false },
+                            title = { Text(text = stringResource(R.string.product_list_dialog_title)) },
+                            text = { Text(text = stringResource(R.string.product_list_dialog_message),) },
+                            confirmButton = {
+                                ShopButtons.Small(
+                                    text = stringResource(R.string.dialog_confirm_button),
+                                    onClick = {
+                                        action.productListToBarcodeScannerAction.invoke()
+                                    },
+                                    modifier = Modifier
+                                        .width(100.dp)
+                                )
+                            },
+                            dismissButton = {
+                                ShopButtons.Small(
+                                    text = stringResource(R.string.dialog_dismiss_button),
+                                    onClick = {isDialogOpen = false},
+                                    modifier = Modifier
+                                        .width(100.dp)
+                                )
+                            },
+                        )
+                    }else{
+                        isDialogOpen = false
+                        action.productListToBarcodeScannerAction.invoke()
                     }
                 }
             }
