@@ -189,24 +189,8 @@ fun ProductListScreen(
                                 isDialogOpen = false },
                             title = { Text(text = stringResource(R.string.product_list_dialog_title)) },
                             text = { Text(text = stringResource(R.string.product_list_dialog_message),) },
-                            confirmButton = {
-                                ShopButtons.Small(
-                                    text = stringResource(R.string.dialog_confirm_button),
-                                    onClick = {
-                                        action.productListToBarcodeScannerAction.invoke()
-                                    },
-                                    modifier = Modifier
-                                        .width(100.dp)
-                                )
-                            },
-                            dismissButton = {
-                                ShopButtons.Small(
-                                    text = stringResource(R.string.dialog_dismiss_button),
-                                    onClick = {isDialogOpen = false},
-                                    modifier = Modifier
-                                        .width(100.dp)
-                                )
-                            },
+                            confirmOnClick = { action.productListToBarcodeScannerAction.invoke() },
+                            dismissOnClick = { isDialogOpen = false },
                         )
                     }else{
                         isDialogOpen = false

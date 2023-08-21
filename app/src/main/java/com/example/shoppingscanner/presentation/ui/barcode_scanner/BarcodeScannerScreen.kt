@@ -267,31 +267,14 @@ fun BarcodeScannerScreen(
                             isDialogOpen = false
                             action.barcodeScannerToCartAction.invoke()
                         }else{
-                            println("alert")
                             ShopDialogs.ShopDialog(
                                 modifier = Modifier,
                                 onDismissRequest = {
                                     isDialogOpen = false },
                                 title = { Text(text = stringResource(R.string.barcode_scanner_dialog_title)) },
                                 text = { Text(text = stringResource(R.string.barcode_scanner_dialog_message),) },
-                                confirmButton = {
-                                    ShopButtons.Small(
-                                        text = stringResource(R.string.dialog_confirm_button),
-                                        onClick = {
-                                           action.barcodeScannerToCartAction.invoke()
-                                        },
-                                        modifier = Modifier
-                                            .width(100.dp)
-                                    )
-                                },
-                                dismissButton = {
-                                    ShopButtons.Small(
-                                        text = stringResource(R.string.dialog_dismiss_button),
-                                        onClick = {isDialogOpen = false},
-                                        modifier = Modifier
-                                            .width(100.dp)
-                                    )
-                                },
+                                confirmOnClick = { action.barcodeScannerToCartAction.invoke() },
+                                dismissOnClick = { isDialogOpen = false },
                             )
                         }
                     }
