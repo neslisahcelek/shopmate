@@ -12,3 +12,7 @@ data class BarcodeScannerState(
     var messageId: Int? = null,
     var missingProducts: List<ListProduct> = mutableListOf()
 )
+
+sealed class BarcodeScannerEvent {
+
+}
